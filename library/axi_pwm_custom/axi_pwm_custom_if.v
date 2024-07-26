@@ -57,30 +57,107 @@ module axi_pwm_custom_if (
   localparam PULSE_PERIOD = 4095;
 
   // internal registers
-
-  /*here*/
-
+  reg           resetn_in        = 1'b0;
+  //reg           pwm_clk          = 1'b0;
+  reg   [11:0]  data_channel_0_aux   = 12'b0;
+  reg   [11:0]  data_channel_1_aux   = 12'b0;
+  reg   [11:0]  data_channel_2_aux   = 12'b0;
+  reg   [11:0]  data_channel_3_aux   = 12'b0;
+  reg   [11:0]  data_channel_4_aux   = 12'b0;
+  reg   [11:0]  data_channel_5_aux   = 12'b0;
+  reg   [11:0]  pulse_period_cnt = 12'h0;
+  reg   [11:0]  pulse_period_d   = 12'd4095;
+  reg pwm_led_0_reg;
+  reg pwm_led_1_reg;
+  reg pwm_led_2_reg;
+  reg pwm_led_3_reg;
+  reg pwm_led_4_reg;
+  reg pwm_led_5_reg; 
   // internal wires
-
-  /*here*/
+  wire end_of_period;  
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
-  /*here*/
-
+  assign end_of_period =(pulse_period_cnt == pulse_period_d) ? 1'b1 : 1'b0; 
+  /*if (pulse_period_cnt == pulse_period_d)
+  end_of_period= 1'b1;
+  else
+  end_of_period=1'b0; Cand ajungem la perioada maxima end_of_period o sa fie 1
+*/
 
 // Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
+  always @(posedge pwm_clk) begin
+    if(end_of_period == 1'b1) begin
+      pulse_period_cnt <= 12'b0;
+    end else begin
+      pulse_period_cnt <= pulse_period_cnt + 1'b1;
+    end
+  end
+/*Cand end_of_period este cu 1, contarul este intializat cu 1 */
 
 
 // control the pwm signal value based on the input signal and counter value
-
-  /*here*/
+always @(posedge pwm_clk) begin
+    if(pulse_period_cnt < data_channel_0_aux) begin
+      pwm_led_0_reg<=1'b1;
+    end else begin
+      pwm_led_0_reg<=1'b0;
+    end
+  end
+/*Cand perioada este mai mica decat valoarea valoarea ch0 o sa se ledul pe 1 logic si altfel o sa fie in 0 logic*/
+always @(posedge pwm_clk) begin
+    if(pulse_period_cnt < data_channel_1_aux) begin
+      pwm_led_1_reg <=1'b1;
+    end else begin
+      pwm_led_1_reg <=1'b0;
+    end
+  end
+always @(posedge pwm_clk) begin
+    if(pulse_period_cnt < data_channel_2_aux) begin
+      pwm_led_2_reg <=1'b1;
+    end else begin
+      pwm_led_2_reg <=1'b0;
+    end
+  end
+always @(posedge pwm_clk) begin
+    if(pulse_period_cnt < data_channel_3_aux) begin
+      pwm_led_3_reg<=1'b1;
+    end else begin
+      pwm_led_3_reg<=1'b0;
+    end
+  end
+  always @(posedge pwm_clk) begin
+    if(pulse_period_cnt < data_channel_4_aux) begin
+      pwm_led_4_reg<=1'b1;
+    end else begin
+      pwm_led_4_reg<=1'b0;
+    end
+  end
+  always @(posedge pwm_clk) begin
+    if(pulse_period_cnt < data_channel_5_aux) begin
+      pwm_led_5_reg<=1'b1;
+    end else begin
+      pwm_led_5_reg<=1'b0;
+    end
+  end
+  
+assign  pwm_led_0=pwm_led_0_reg;
+assign  pwm_led_1= pwm_led_1_reg;
+assign  pwm_led_2= pwm_led_2_reg;
+assign  pwm_led_3=pwm_led_3_reg;
+assign  pwm_led_4=pwm_led_4_reg;
+assign  pwm_led_5=pwm_led_5_reg;
 
 // make sure that the new data is processed only after the END_OF_PERIOD
-
-  /*here*/
-
-
+always @(posedge pwm_clk) begin
+  if (end_of_period == 1'b1) begin
+  data_channel_0_aux= data_channel_0;
+  data_channel_1_aux= data_channel_1;
+  data_channel_2_aux= data_channel_2;
+  data_channel_3_aux= data_channel_3;
+  data_channel_4_aux= data_channel_4;
+  data_channel_5_aux= data_channel_5;
+  end
+end
 endmodule
