@@ -59,28 +59,71 @@ module axi_pwm_custom_if (
   // internal registers
 
   /*here*/
-
+ reg[11:0] pulse_per_cnt = 12'h000;
+ reg[11:0] data_ch0_sig;
+ reg[11:0] data_ch1_sig ;
+ reg[11:0] data_ch2_sig ;
+ reg[11:0] data_ch3_sig ;
+ reg[11:0] data_ch4_sig ;
+ reg[11:0] data_ch5_sig ;
+ 
   // internal wires
 
   /*here*/
+wire end_of_period;
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
   /*here*/
+assign end_of_period=(PULSE_PERIOD==pulse_per_cnt)?1'b1:1'b0;
 
 
 // Create a counter from 0 to PULSE_PERIOD
 
   /*here*/
+always@(posedge pwm_clk) begin
+  if(rstn==0) begin
+    pulse_per_cnt<= 12'h000;
+  end else  if(pulse_per_cnt==PULSE_PERIOD) begin
+  pulse_per_cnt=12'h000;
+end else begin
 
+  pulse_per_cnt<=pulse_per_cnt+ 1'b1;
+
+end
+end
 
 // control the pwm signal value based on the input signal and counter value
+
+assign pwm_led_0 =(data_ch0_sig==0)?1'b0:1'b1;
+assign pwm_led_1 =(data_ch1_sig==0)?1'b0:1'b1;
+assign pwm_led_2 =(data_ch2_sig==0)?1'b0:1'b1;
+assign pwm_led_3 =(data_ch3_sig==0)?1'b0:1'b1;
+assign pwm_led_4 =(data_ch4_sig==0)?1'b0:1'b1;
+assign pwm_led_5 =(data_ch5_sig==0)?1'b0:1'b1;
 
   /*here*/
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
   /*here*/
-
-
+always@(posedge pwm_clk) begin
+  if(pulse_per_cnt==12'h000 || end_of_period==1'b1) begin
+  data_ch0_sig<= data_channel_0;
+  data_ch1_sig<=data_channel_1;
+  data_ch2_sig<=data_channel_2;
+  data_ch3_sig<=data_channel_3;
+  data_ch4_sig<=data_channel_4;
+  data_ch5_sig<=data_channel_5; 
+  
+end else begin
+  data_ch0_sig<=(data_ch0_sig==0)? 12'h000:data_ch0_sig-1'b1;
+  data_ch1_sig<=(data_ch1_sig==0)? 12'h000:data_ch1_sig-1'b1;
+  data_ch2_sig<=(data_ch2_sig==0)? 12'h000:data_ch2_sig-1'b1;
+  data_ch3_sig<=(data_ch3_sig==0)? 12'h000:data_ch3_sig-1'b1;
+  data_ch4_sig<=(data_ch4_sig==0)? 12'h000:data_ch4_sig-1'b1;
+  data_ch5_sig<=(data_ch5_sig==0)? 12'h000:data_ch5_sig-1'b1;
+  
+end
+end
 endmodule
