@@ -34,6 +34,7 @@
 // ***************************************************************************
 // This is the LVDS/DDR interface
 
+
 `timescale 1ns/100ps
 
 module axi_pwm_custom_if ( 
@@ -57,30 +58,66 @@ module axi_pwm_custom_if (
   localparam PULSE_PERIOD = 4095;
 
   // internal registers
-
-  /*here*/
+  reg [11:0] counter;
+  reg [11:0] pwm_value_0, pwm_value_1, pwm_value_2, pwm_value_3, pwm_value_4, pwm_value_5;
+  reg end_of_period;
 
   // internal wires
+  wire pwm_signal_0, pwm_signal_1, pwm_signal_2, pwm_signal_3, pwm_signal_4, pwm_signal_5;
 
-  /*here*/
+  // generate a signal named end_of_period which has '1' logic value at the end of the signal period
+  always @(posedge pwm_clk or negedge rstn) begin
+    if (!rstn)
+      end_of_period <= 1'b0;
+    else if (counter == PULSE_PERIOD)
+      end_of_period <= 1'b1;
+    else
+      end_of_period <= 1'b0;
+  end
 
-// generate a signal named end_of_period which has '1' logic value at the end of the signal period
+  // Create a counter from 0 to PULSE_PERIOD
+  always @(posedge pwm_clk or negedge rstn) begin
+    if (!rstn)
+      counter <= 12'd0;
+    else if (counter == PULSE_PERIOD)
+      counter <= 12'd0;
+    else
+      counter <= counter + 12'd1;
+  end
 
-  /*here*/
+  // control the pwm signal value based on the input signal and counter value
+  assign pwm_signal_0 = (counter < pwm_value_0) ? 1'b1 : 1'b0;
+  assign pwm_signal_1 = (counter < pwm_value_1) ? 1'b1 : 1'b0;
+  assign pwm_signal_2 = (counter < pwm_value_2) ? 1'b1 : 1'b0;
+  assign pwm_signal_3 = (counter < pwm_value_3) ? 1'b1 : 1'b0;
+  assign pwm_signal_4 = (counter < pwm_value_4) ? 1'b1 : 1'b0;
+  assign pwm_signal_5 = (counter < pwm_value_5) ? 1'b1 : 1'b0;
 
+  // make sure that the new data is processed only after the END_OF_PERIOD
+  always @(posedge pwm_clk or negedge rstn) begin
+    if (!rstn) begin
+      pwm_value_0 <= 12'd0;
+      pwm_value_1 <= 12'd0;
+      pwm_value_2 <= 12'd0;
+      pwm_value_3 <= 12'd0;
+      pwm_value_4 <= 12'd0;
+      pwm_value_5 <= 12'd0;
+    end else if (end_of_period) begin
+      pwm_value_0 <= data_channel_0;
+      pwm_value_1 <= data_channel_1;
+      pwm_value_2 <= data_channel_2;
+      pwm_value_3 <= data_channel_3;
+      pwm_value_4 <= data_channel_4;
+      pwm_value_5 <= data_channel_5;
+    end
+  end
 
-// Create a counter from 0 to PULSE_PERIOD
-
-  /*here*/
-
-
-// control the pwm signal value based on the input signal and counter value
-
-  /*here*/
-
-// make sure that the new data is processed only after the END_OF_PERIOD
-
-  /*here*/
-
+  // Assign PWM outputs
+  assign pwm_led_0 = pwm_signal_0;
+  assign pwm_led_1 = pwm_signal_1;
+  assign pwm_led_2 = pwm_signal_2;
+  assign pwm_led_3 = pwm_signal_3;
+  assign pwm_led_4 = pwm_signal_4;
+  assign pwm_led_5 = pwm_signal_5;
 
 endmodule
