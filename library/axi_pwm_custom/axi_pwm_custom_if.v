@@ -57,30 +57,86 @@ module axi_pwm_custom_if (
   localparam PULSE_PERIOD = 4095;
 
   // internal registers
+  reg pwm_led_0_aux;
+  reg pwm_led_1_aux;
+  reg pwm_led_2_aux;
+  reg pwm_led_3_aux;
+  reg pwm_led_4_aux;
+  reg pwm_led_5_aux;
+  //register for initialization
+  wire init = 1'b1;
 
-  /*here*/
+  //counter from 0 to PULSE_PERIOD
+  reg [11:0] counter = 12'hFFF;
+
+  //internal registers for temporarily storing input data
+  reg [11:0] data_0_reg;
+  reg [11:0] data_1_reg;
+  reg [11:0] data_2_reg;
+  reg [11:0] data_3_reg;
+  reg [11:0] data_4_reg;
+  reg [11:0] data_5_reg;
 
   // internal wires
 
-  /*here*/
+  wire end_of_period;
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
-  /*here*/
-
+ assign end_of_period = ((counter == PULSE_PERIOD)) ? 1'b1 : 1'b0;
 
 // Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
+  always @(posedge pwm_clk) begin
+    if(end_of_period == 1'b1) begin
+      counter <= 12'b0;
+    end else begin
+      counter <= counter + 1'b1;
+    end
+  end
 
 
 // control the pwm signal value based on the input signal and counter value
+always @(posedge pwm_clk)
+  pwm_led_0_aux <= (counter < data_0_reg) ? 1'b1 : 1'b0;
+always @(posedge pwm_clk)
+  pwm_led_1_aux = (counter < data_1_reg) ? 1'b1 : 1'b0;
+always @(posedge pwm_clk)
+  pwm_led_2_aux = (counter < data_2_reg) ? 1'b1 : 1'b0;
+always @(posedge pwm_clk)
+  pwm_led_3_aux = (counter < data_3_reg) ? 1'b1 : 1'b0;
+always @(posedge pwm_clk)
+  pwm_led_4_aux = (counter < data_4_reg) ? 1'b1 : 1'b0;//test
+always @(posedge pwm_clk)
+  pwm_led_5_aux = (counter < data_5_reg) ? 1'b1 : 1'b0;
 
-  /*here*/
+
+assign pwm_led_0 = pwm_led_0_aux;
+assign pwm_led_1 = pwm_led_1_aux;
+assign pwm_led_2 = pwm_led_2_aux;
+assign pwm_led_3 = pwm_led_3_aux;
+assign pwm_led_4 = pwm_led_4_aux;
+assign pwm_led_5 = pwm_led_5_aux;
+
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
-  /*here*/
+//   assign data_0_reg = (end_of_period == 1'b1) ? data_channel_0 : data_0_reg;
+//   assign data_1_reg = (end_of_period == 1'b1) ? data_channel_1 : data_1_reg;
+//   assign data_2_reg = (end_of_period == 1'b1) ? data_channel_2 : data_2_reg;
+//   assign data_3_reg = (end_of_period == 1'b1) ? data_channel_3 : data_3_reg;
+//   assign data_4_reg = (end_of_period == 1'b1) ? data_channel_4 : data_4_reg;
+//   assign data_5_reg = (end_of_period == 1'b1) ? data_channel_5 : data_5_reg;
 
+always @(posedge pwm_clk) begin
+    if(end_of_period == 1'b1) begin
+      data_0_reg <= data_channel_0;
+      data_1_reg <= data_channel_1;
+      data_2_reg <= data_channel_2;
+      data_3_reg <= data_channel_3;
+      data_4_reg <= data_channel_4;
+      data_5_reg <= data_channel_5;
+    end
+  end
 
 endmodule
