@@ -63,6 +63,8 @@ module system_top (
   inout   [ 1:0]  btn,
   inout   [ 5:0]  led,
 
+
+
 // 4. Add SPI ports for both ADC PMOD connector and sniffing PMOD connector 
   /*here*/
   /*here*/
@@ -73,6 +75,17 @@ module system_top (
   /*here*/
   /*here*/
   /*here*/
+
+  output           spi_adc_clk,
+  output           spi_adc_cs,
+  input           spi_adc_miso,
+  output          spi_adc_mosi,
+
+  output           spi_sniff_clk,
+  output          spi_sniff_cs,
+  output           spi_sniff_miso,
+  output          spi_sniff_mosi
+
 );
 
   // internal signals
@@ -91,6 +104,13 @@ module system_top (
   /*here*/
   /*here*/
 
+  wire            pwm_led_0;
+  wire            pwm_led_1;
+  wire            pwm_led_2;
+  wire            pwm_led_3;
+  wire            pwm_led_4;
+  wire            pwm_led_5;
+
   // instantiations
   ad_iobuf #(
     .DATA_WIDTH (2)
@@ -105,12 +125,23 @@ module system_top (
   ) i_iobuf_leds (
     .dio_t (2'h0),
 // 2. Connect the PWM wires to the input port of the ad_iobuf
-    .dio_i ({/*here*/           //led[5]
-             /*here*/           //led[4]
-             /*here*/           //led[3]
-             /*here*/           //led[2]
-             /*here*/           //led[1]
-             /*here*/}),        //led[0]
+    // .dio_i ({/*here*/           //led[5]
+    //          /*here*/           //led[4]
+    //          /*here*/           //led[3]
+    //          /*here*/           //led[2]
+    //          /*here*/           //led[1]
+    //          /*here*/}),        //led[0]
+
+    .dio_i ({pwm_led_4,
+             pwm_led_3,           
+             pwm_led_5,           
+                
+             pwm_led_1,
+             pwm_led_0,           
+             pwm_led_2           
+}),        
+
+
     .dio_o (gpio_i[7:2]),
     .dio_p (led));
 
@@ -123,6 +154,12 @@ module system_top (
   /*here*/
   /*here*/
   /*here*/
+
+  assign spi_sniff_clk = spi_adc_clk;
+  assign spi_sniff_cs = spi_adc_cs;
+  assign spi_sniff_miso = spi_adc_miso;
+  assign spi_sniff_mosi = spi_adc_mosi;
+
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -153,14 +190,14 @@ module system_top (
     .gpio_t (gpio_t),
 
     .spi0_clk_i (),
-    .spi0_clk_o (/*here*/),   // 5. Connect here the SPI CLK
-    .spi0_csn_0_o (/*here*/),   // 5. Connect here the SPI CS
+    .spi0_clk_o (/*here*/ spi_adc_clk),   // 5. Connect here the SPI CLK
+    .spi0_csn_0_o (/*here*/ spi_adc_cs),   // 5. Connect here the SPI CS
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (/*here*/),   // 5. Connect here the SPI MISO
+    .spi0_sdi_i (/*here*/ spi_adc_miso),   // 5. Connect here the SPI MISO
     .spi0_sdo_i (),
-    .spi0_sdo_o (/*here*/),   // 5. Connect here the SPI MOSI
+    .spi0_sdo_o (/*here*/ spi_adc_mosi),   // 5. Connect here the SPI MOSI
     .spi1_clk_i (1'b0),
     .spi1_clk_o (),
     .spi1_csn_0_o (),
@@ -176,6 +213,14 @@ module system_top (
     /*here*/
     /*here*/
     /*here*/
-    /*here*/);
+    /*here*/
+    .pwm_led_0_r (pwm_led_0),
+    .pwm_led_0_g (pwm_led_1),
+    .pwm_led_0_b (pwm_led_2),
+    .pwm_led_1_r (pwm_led_3),
+    .pwm_led_1_g (pwm_led_4),
+    .pwm_led_1_b (pwm_led_5));
+
+
 
 endmodule
