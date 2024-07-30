@@ -56,31 +56,106 @@ module axi_pwm_custom_if (
 
   localparam PULSE_PERIOD = 4095;
 
-  // internal registers
+// internal registers
 
-  /*here*/
+  reg [11:0] counter = 0;
 
-  // internal wires
+  reg [11:0] data_channel_0_aux;
+  reg [11:0] data_channel_1_aux;
+  reg [11:0] data_channel_2_aux;
+  reg [11:0] data_channel_3_aux;
+  reg [11:0] data_channel_4_aux;
+  reg [11:0] data_channel_5_aux;
 
-  /*here*/
+  reg r_0 = 0;
+  reg r_1 = 0;
+  reg r_2 = 0;
+  reg r_3 = 0;
+  reg r_4 = 0;
+  reg r_5 = 0;
 
-// generate a signal named end_of_period which has '1' logic value at the end of the signal period
+// internal wires
 
-  /*here*/
+  wire end_of_period;
 
+// generate a signal named end_of_period which has '1' logic value at the end of the PULSE_PERIOD
+
+  assign end_of_period = (counter == PULSE_PERIOD) ? 1 : 0;
 
 // Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
-
+  always @(posedge pwm_clk or negedge rstn) begin
+    if (rstn == 0)
+        counter <= 0;
+    else begin
+        if (counter == PULSE_PERIOD)
+          counter <= 0;
+        else
+          counter <= counter + 1;
+    end
+   end
 
 // control the pwm signal value based on the input signal and counter value
 
-  /*here*/
+  always @(posedge pwm_clk) begin
+    if (counter < data_channel_0_aux)
+      r_0 <= 1;
+    else
+      r_0 <= 0;
+  end
 
-// make sure that the new data is processed only after the END_OF_PERIOD
+  always @(posedge pwm_clk) begin
+    if (counter < data_channel_1_aux)
+      r_1 <= 1;
+    else
+      r_1 <= 0;
+  end
 
-  /*here*/
+  always @(posedge pwm_clk) begin
+    if (counter < data_channel_2_aux)
+      r_2 <= 1;
+    else
+      r_2 <= 0;
+  end
 
+  always @(posedge pwm_clk) begin
+    if (counter < data_channel_3_aux)
+      r_3 <= 1;
+    else
+      r_3 <= 0;
+  end
+
+  always @(posedge pwm_clk) begin
+    if (counter < data_channel_4_aux)
+      r_4 <= 1;
+    else
+      r_4 <= 0;
+  end
+
+  always @(posedge pwm_clk) begin
+    if (counter < data_channel_5_aux)
+      r_5 <= 1;
+    else
+      r_5 <= 0;
+  end
+
+// make sure that the new data is processed only after the end_of_period
+
+  always @(posedge end_of_period) begin
+    data_channel_0_aux <= data_channel_0;
+    data_channel_1_aux <= data_channel_1;
+    data_channel_2_aux <= data_channel_2;
+    data_channel_3_aux <= data_channel_3;
+    data_channel_4_aux <= data_channel_4;
+    data_channel_5_aux <= data_channel_5;
+  end
+
+
+  assign pwm_led_0 = r_0;
+  assign pwm_led_1 = r_1;
+  assign pwm_led_2 = r_2;
+  assign pwm_led_3 = r_3;
+  assign pwm_led_4 = r_4;
+  assign pwm_led_5 = r_5;
 
 endmodule

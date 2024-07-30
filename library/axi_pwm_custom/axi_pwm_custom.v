@@ -41,12 +41,12 @@ module axi_pwm_custom #(
   
 // 1.Create the pwm output signals 
 
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
+  output                   pwm_led_0,
+  output                   pwm_led_1,
+  output                   pwm_led_2,
+  output                   pwm_led_3,
+  output                   pwm_led_4,
+  output                   pwm_led_5,
 
   // axi interface
 
@@ -183,7 +183,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 0 
+    .adc_data_channel (data_channel_0),  // Connect the samples data for CHANNEL 0 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -211,7 +211,7 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[0]),
-    .up_rack  ( up_rack_s[0])); 
+    .up_rack  (up_rack_s[0])); 
 
   up_adc_channel #(
     .CHANNEL_ID(1)
@@ -237,7 +237,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 1 
+    .adc_data_channel (data_channel_1),  // Connect the samples data for CHANNEL 1 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -265,7 +265,7 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[1]),
-    .up_rack  ( up_rack_s[1])); 
+    .up_rack  (up_rack_s[1])); 
 
   up_adc_channel #(
     .CHANNEL_ID(2)
@@ -291,7 +291,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 2 
+    .adc_data_channel (data_channel_2),  // Connect the samples data for CHANNEL 2 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -319,7 +319,7 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[2]),
-    .up_rack  ( up_rack_s[2])); 
+    .up_rack  (up_rack_s[2])); 
 
   up_adc_channel #(
     .CHANNEL_ID(3)
@@ -345,7 +345,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 3
+    .adc_data_channel (data_channel_3),  // Connect the samples data for CHANNEL 3
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -373,7 +373,7 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[3]),
-    .up_rack  ( up_rack_s[3])); 
+    .up_rack  (up_rack_s[3])); 
 
   up_adc_channel #(
     .CHANNEL_ID(4)
@@ -399,7 +399,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 4 
+    .adc_data_channel (data_channel_4),  // Connect the samples data for CHANNEL 4 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -427,7 +427,7 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[4]),
-    .up_rack  ( up_rack_s[4])); 
+    .up_rack  (up_rack_s[4])); 
 
   up_adc_channel #(
     .CHANNEL_ID(5)
@@ -453,7 +453,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 5
+    .adc_data_channel (data_channel_5),  // Connect the samples data for CHANNEL 5
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -481,11 +481,23 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[5]),
-    .up_rack  ( up_rack_s[5])); 
+    .up_rack  (up_rack_s[5])); 
 
   // Add the interface module and connect it to the samples data and output ports
   axi_pwm_custom_if i_if_axi_pwm_custom (
-    /*here*/
-  );
+    .pwm_clk (pwm_clk),
+    .rstn (up_rstn),
+    .data_channel_0 (data_channel_0),
+    .data_channel_1 (data_channel_1),
+    .data_channel_2 (data_channel_2),
+    .data_channel_3 (data_channel_3),
+    .data_channel_4 (data_channel_4),
+    .data_channel_5 (data_channel_5),
+    .pwm_led_0 (pwm_led_0),
+    .pwm_led_1 (pwm_led_1),
+    .pwm_led_2 (pwm_led_2),
+    .pwm_led_3 (pwm_led_3),
+    .pwm_led_4 (pwm_led_4),
+    .pwm_led_5 (pwm_led_5));
 
 endmodule
