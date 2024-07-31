@@ -56,31 +56,100 @@ module axi_pwm_custom_if (
 
   localparam PULSE_PERIOD = 4095;
 
-  // internal registers
+// internal registers
 
-  /*here*/
+  reg      [11:0]  data_channel_0_t = 12'b0;
+  reg      [11:0]  data_channel_1_t = 12'b0;
+  reg      [11:0]  data_channel_2_t = 12'b0;
+  reg      [11:0]  data_channel_3_t = 12'b0;
+  reg      [11:0]  data_channel_4_t = 12'b0;
+  reg      [11:0]  data_channel_5_t = 12'b0;
+  reg      [11:0]  count = 12'b0;
+  reg      [11:0]  full_period = PULSE_PERIOD;
+  reg              pwm_led_0_t = 1'b0;
+  reg              pwm_led_1_t = 1'b0;
+  reg              pwm_led_2_t = 1'b0;
+  reg              pwm_led_3_t = 1'b0;
+  reg              pwm_led_4_t = 1'b0;
+  reg              pwm_led_5_t = 1'b0;
 
-  // internal wires
+// internal wires
 
-  /*here*/
+  wire             end_of_period;
+
+  assign pwm_led_0 = pwm_led_0_t;
+  assign pwm_led_1 = pwm_led_1_t;
+  assign pwm_led_2 = pwm_led_2_t;
+  assign pwm_led_3 = pwm_led_3_t;
+  assign pwm_led_4 = pwm_led_4_t;
+  assign pwm_led_5 = pwm_led_5_t;
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
-  /*here*/
-
+  assign end_of_period = (count == full_period) ? 1'b1 : 1'b0;
 
 // Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
+  always @(posedge pwm_clk) begin
 
+    if (end_of_period || !rstn)
+      count <= 1'b0;
+    else
+      count <= count + 1;
+    
+  end
 
 // control the pwm signal value based on the input signal and counter value
 
-  /*here*/
+  always @(posedge pwm_clk) begin
+
+    if (count < data_channel_0)
+      pwm_led_0_t <= 1'b1;
+    else
+      pwm_led_0_t <= 1'b0;
+    if (count < data_channel_1)
+      pwm_led_1_t <= 1'b1;
+    else
+      pwm_led_1_t <= 1'b0;
+    if (count < data_channel_2)
+      pwm_led_2_t <= 1'b1;
+    else
+      pwm_led_2_t <= 1'b0;
+    if (count < data_channel_3)
+      pwm_led_3_t <= 1'b1;
+    else
+      pwm_led_3_t <= 1'b0;
+    if (count < data_channel_4)
+      pwm_led_4_t <= 1'b1;
+    else
+      pwm_led_4_t <= 1'b0;
+    if (count < data_channel_5)
+      pwm_led_5_t <= 1'b1;
+    else
+      pwm_led_5_t <= 1'b0;
+
+  end
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
-  /*here*/
+  always @(posedge pwm_clk) begin
 
+    if (end_of_period || !rstn) begin
+      data_channel_0_t <= data_channel_0;
+      data_channel_1_t <= data_channel_1;
+      data_channel_2_t <= data_channel_2;
+      data_channel_3_t <= data_channel_3;
+      data_channel_4_t <= data_channel_4;
+      data_channel_5_t <= data_channel_5;
+    end else begin
+      data_channel_0_t <= data_channel_0_t;
+      data_channel_1_t <= data_channel_1_t;
+      data_channel_2_t <= data_channel_2_t;
+      data_channel_3_t <= data_channel_3_t;
+      data_channel_4_t <= data_channel_4_t;
+      data_channel_5_t <= data_channel_5_t;
+    end
+    
+  end
 
 endmodule
