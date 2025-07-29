@@ -1,0 +1,27 @@
+From 46e843feb01ae2d50ba83adac43acab54354732d Mon Sep 17 00:00:00 2001
+From: Cristian Mihai Popa <cristianmihai.popa@analog.com>
+Date: Tue, 29 Jul 2025 16:55:55 +0300
+Subject: [PATCH] library/verilog_task_testbench: Add fix
+
+- Added fixed time for simulation
+---
+ library/verilog_task_testbench/verilog_task_testbench_tb.v | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/library/verilog_task_testbench/verilog_task_testbench_tb.v b/library/verilog_task_testbench/verilog_task_testbench_tb.v
+index faafc01fc..663b3a514 100644
+--- a/library/verilog_task_testbench/verilog_task_testbench_tb.v
++++ b/library/verilog_task_testbench/verilog_task_testbench_tb.v
+@@ -40,4 +40,8 @@ module verilog_task_testbench_tb;
+ 
+   `define TIMEOUT 900
+ 
++  initial begin
++    #100000 $finish;
++  end
++
+ endmodule
+\ No newline at end of file
+-- 
+2.47.2
+
