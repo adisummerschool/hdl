@@ -40,4 +40,21 @@ module verilog_task_testbench_tb;
 
   `define TIMEOUT 900
 
+  reg clk = 0, reset = 0;
+  wire [11:0] wave;
+  
+  verilog_task_testbench twave (clk, reset, wave);
+
+  initial begin
+    #600000 $finish;
+  end
+
+  initial begin
+    forever #2.5 clk = ~clk;
+  end
+
+  initial begin
+    #100 reset = ~reset;
+  end
+
 endmodule
