@@ -36,11 +36,35 @@
 
 `timescale 1ns/100ps
 
-module verilog_task_testbench ( 
+module verilog_task_testbench (
 
   input            ref_clk,
   input            rstn,
   output   [11:0]  triangle_wave
 );
+
+  reg             dir = 1'b1;
+  reg   [11:0]    cnt = 12'b0;
+
+  always @(posedge ref_clk)
+  begin
+    if (!rstn) begin
+      cnt <= 12'b0;
+    end else begin
+      if (dir && cnt < 12'hffe) begin
+        cnt <= cnt + 2'd2;
+      end else begin
+        dir <= 1'b0;
+
+        if (cnt > 12'h000) begin
+          cnt <= cnt - 2'd2;
+        end else begin
+          dir <= 1'b1;
+        end
+      end
+    end
+  end
+
+  assign triangle_wave = cnt;
 
 endmodule
