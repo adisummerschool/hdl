@@ -58,30 +58,114 @@ module axi_pwm_custom_if (
 
 // internal registers
 
-  /*here*/
+  reg led0;
+  reg led1;
+  reg led2;
+  reg led3;
+  reg led4;
+  reg led5;
+  reg [11:0] cnt =12'd0;
 
 // internal wires
 
-  /*here*/
+  reg [11:0] val0;
+  reg [11:0] val1;
+  reg [11:0] val2;
+  reg [11:0] val3;
+  reg [11:0] val4;
+  reg [11:0] val5;
+  wire end_of_period;
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
-  /*here*/
+  assign end_of_period = (cnt == PULSE_PERIOD);
 
 // Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
+  always @(posedge pwm_clk or negedge rstn) begin
+    if (!rstn || end_of_period)
+      cnt <= 12'd0;
+      
+    else
+      cnt <= cnt + 12'd1;
+  end
 
 // control the pwm signal value based on the input signal and counter value
 
-  /*here*/
+  // assign pwm_led_0 = (data_channel_0 > cnt);
+  // assign pwm_led_1 = (data_channel_1 > cnt);
+  // assign pwm_led_2 = (data_channel_2 > cnt);
+  // assign pwm_led_3 = (data_channel_3 > cnt);
+  // assign pwm_led_4 = (data_channel_4 > cnt);
+  // assign pwm_led_5 = (data_channel_5 > cnt);
+
+  always @(posedge pwm_clk or negedge rstn) begin
+    if(!rstn) begin
+      led0 <= 1'b0;
+      led1 <= 1'b0;
+      led2 <= 1'b0;
+      led3 <= 1'b0;
+      led4 <= 1'b0;
+      led5 <= 1'b0;
+    end
+    else begin
+      if(val0 >= cnt)
+        led0 <= 1'b1;
+      else
+        led0 <= 1'b0; 
+      if(val1 >= cnt)
+        led1 <= 1'b1;
+      else
+        led1 <= 1'b0; 
+      if(val2 >= cnt)
+        led2 <= 1'b1;
+      else
+        led2 <= 1'b0; 
+      if(val3 >= cnt)
+        led3 <= 1'b1;
+      else
+        led3 <= 1'b0; 
+      if(val4 >= cnt)
+        led4 <= 1'b1;
+      else
+        led4 <= 1'b0; 
+      if(val5 >= cnt)
+        led5 <= 1'b1;
+      else
+        led5 <= 1'b0; 
+    end
+  end
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
-  /*here*/
+  always @(posedge pwm_clk ) begin
+   
+   if(end_of_period)begin
+      val0 <= data_channel_0;
+      val1 <= data_channel_1;
+      val2 <= data_channel_2;
+      val3 <= data_channel_3;
+      val4 <= data_channel_4;
+      val5 <= data_channel_5;
+    end 
+    else begin
+       val0 <= val0;
+      val1 <= val1;
+      val2 <= val2;
+      val3 <= val3;
+      val4 <= val4;
+      val5 <= val5;
+    end
+
+  end
 
 // continous assigment of the correct PWM value for the LEDs
 
- /*here*/
+  assign pwm_led_0 = led0;
+  assign pwm_led_1 = led1;
+  assign pwm_led_2 = led2;
+  assign pwm_led_3 = led3;
+  assign pwm_led_4 = led4;
+  assign pwm_led_5 = led5;
 
 endmodule
