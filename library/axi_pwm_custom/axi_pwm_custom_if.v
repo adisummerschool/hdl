@@ -56,32 +56,63 @@ module axi_pwm_custom_if (
 
   localparam PULSE_PERIOD = 4095;
 
+  //////////////
+//adc_rst trebuie negat ca sa fie resetul bun//////////////////////
+//=> folosim up_rst
+/////////////
+
 // internal registers
 
-  /*here*/
+reg [11:0] cnt = 0;
+reg [11:0] data [5:0];
 
 // internal wires
 
-  /*here*/
+wire end_of_period;
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
+//used to update data
 
-  /*here*/
+assign end_of_period = (cnt == PULSE_PERIOD);
 
 // Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
+always @(posedge pwm_clk or negedge rstn) begin
+    if (!rstn) begin
+      cnt <= 0;
+    end else begin
+      cnt <= /*(cnt == PULSE_PERIOD) ? 12'd0 :*/ cnt + 12'd1;
+    end
+  end
 
 // control the pwm signal value based on the input signal and counter value
 
-  /*here*/
-
-// make sure that the new data is processed only after the END_OF_PERIOD
-
-  /*here*/
+always @(posedge pwm_clk or negedge rstn) begin
+    if (!rstn) begin
+      data[0] <= 12'd0;
+      data[1] <= 12'd0;
+      data[2] <= 12'd0;
+      data[3] <= 12'd0;
+      data[4] <= 12'd0;
+      data[5] <= 12'd0;
+    // make sure that the new data is processed only after the END_OF_PERIOD
+    end else if (end_of_period == 1) begin
+      data[0] <= data_channel_0;
+      data[1] <= data_channel_1;
+      data[2] <= data_channel_2;
+      data[3] <= data_channel_3;
+      data[4] <= data_channel_4;
+      data[5] <= data_channel_5;
+    end
+  end
 
 // continous assigment of the correct PWM value for the LEDs
 
- /*here*/
+assign pwm_led_0 = data [0] > cnt;
+assign pwm_led_1 = data [1] > cnt;
+assign pwm_led_2 = data [2] > cnt;
+assign pwm_led_3 = data [3] > cnt;
+assign pwm_led_4 = data [4] > cnt;
+assign pwm_led_5 = data [5] > cnt;
 
 endmodule
