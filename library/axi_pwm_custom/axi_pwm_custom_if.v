@@ -58,30 +58,79 @@ module axi_pwm_custom_if (
 
 // internal registers
 
-  /*here*/
+  reg [11:0] data_channel_0_reg;
+  reg [11:0] data_channel_1_reg;
+  reg [11:0] data_channel_2_reg;
+  reg [11:0] data_channel_3_reg;
+  reg [11:0] data_channel_4_reg;
+  reg [11:0] data_channel_5_reg;
+
+  reg pwm_led_0_reg=1'b0;
+  reg pwm_led_1_reg=1'b0;
+  reg pwm_led_2_reg=1'b0;
+  reg pwm_led_3_reg=1'b0;
+  reg pwm_led_4_reg=1'b0;
+  reg pwm_led_5_reg=1'b0;
+
+  reg [11:0] counter;
 
 // internal wires
 
-  /*here*/
+  wire end_of_period;
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
-  /*here*/
+ assign end_of_period=(counter==PULSE_PERIOD)?1'b1:1'b0;
 
 // Create a counter from 0 to PULSE_PERIOD
-
-  /*here*/
+  
+  always @(posedge pwm_clk or negedge rstn) begin
+    if (rstn == 1'b0) begin
+      counter<= 12'd0;
+    end else if (end_of_period) begin
+      counter <= 12'd0;
+    end else begin
+      counter <= counter + 1'b1;
+    end
+  end
 
 // control the pwm signal value based on the input signal and counter value
-
-  /*here*/
+  always@(posedge pwm_clk)begin
+      pwm_led_0_reg<=(counter<data_channel_0_reg)?1:0;
+      pwm_led_1_reg<=(counter<data_channel_1_reg)?1:0;
+      pwm_led_2_reg<=(counter<data_channel_2_reg)?1:0;
+      pwm_led_3_reg<=(counter<data_channel_3_reg)?1:0;
+      pwm_led_4_reg<=(counter<data_channel_4_reg)?1:0;
+      pwm_led_5_reg<=(counter<data_channel_5_reg)?1:0;
+  end
 
 // make sure that the new data is processed only after the END_OF_PERIOD
+always @(posedge pwm_clk) begin
+    if (end_of_period) begin
+      data_channel_0_reg <= data_channel_0;
+      data_channel_1_reg <= data_channel_1;
+      data_channel_2_reg <= data_channel_2;
+      data_channel_3_reg <= data_channel_3;
+      data_channel_4_reg <= data_channel_4;
+      data_channel_5_reg <= data_channel_5;
+    end
+    else begin
+      data_channel_0_reg <= data_channel_0_reg;
+      data_channel_1_reg <= data_channel_1_reg;
+      data_channel_2_reg <= data_channel_2_reg;
+      data_channel_3_reg <= data_channel_3_reg;
+      data_channel_4_reg <= data_channel_4_reg;
+      data_channel_5_reg <= data_channel_5_reg;
+    end
 
-  /*here*/
+  end
 
-// continous assigment of the correct PWM value for the LEDs
-
- /*here*/
-
+  // continous assigment of the correct PWM value for the LEDs
+  assign pwm_led_0 = pwm_led_0_reg;
+  assign pwm_led_1 = pwm_led_1_reg;
+  assign pwm_led_2 = pwm_led_2_reg;
+  assign pwm_led_3 = pwm_led_3_reg;
+  assign pwm_led_4 = pwm_led_4_reg;
+  assign pwm_led_5 = pwm_led_5_reg;
+  
 endmodule
