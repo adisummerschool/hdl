@@ -60,28 +60,100 @@ module axi_pwm_custom_if (
 
   /*here*/
 
+  reg eop = 'd0;
+  reg[11:0] cnt = 12'd0, dc0, dc1, dc2, dc3, dc4, dc5;
+  reg pwml0 = 0, pwml1 = 0, pwml2 = 0, pwml3 = 0, pwml4 = 0, pwml5 = 0;
+
 // internal wires
 
   /*here*/
 
+  wire end_of_period;
+
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
   /*here*/
+  always @(posedge pwm_clk) begin
+    eop = (cnt == PULSE_PERIOD) ? 1 : 0;
+  end
 
 // Create a counter from 0 to PULSE_PERIOD
 
   /*here*/
+  always @(posedge pwm_clk) begin
+    if(rstn) begin
+      if(cnt == PULSE_PERIOD) begin
+        cnt <= 12'd0;
+      end
+      else begin
+        cnt <= cnt + 1'd1;
+      end
+    end
+    else begin
+      cnt <= 12'd0;
+    end
+  end
 
 // control the pwm signal value based on the input signal and counter value
 
   /*here*/
 
+  always @(posedge pwm_clk) begin
+    if(rstn) begin
+      if(dc0 > cnt) pwml0 <= 1'd1;
+      else pwml0 <= 1'd0;
+      if(dc1 > cnt) pwml1 <= 1'd1;
+      else pwml1 <= 1'd0;
+      if(dc2 > cnt) pwml2 <= 1'd1;
+      else pwml2 <= 1'd0;
+      if(dc3 > cnt) pwml3 <= 1'd1;
+      else pwml3 <= 1'd0;
+      if(dc4 > cnt) pwml4 <= 1'd1;
+      else pwml4 <= 1'd0;
+      if(dc5 > cnt) pwml5 <= 1'd1;
+      else pwml5 <= 1'd0;
+      end
+      else begin
+        pwml0 <= 1'd0;
+        pwml1 <= 1'd0;
+        pwml2 <= 1'd0;
+        pwml3 <= 1'd0;
+        pwml4 <= 1'd0;
+        pwml5 <= 1'd0;
+      end
+
+  end
+
 // make sure that the new data is processed only after the END_OF_PERIOD
 
   /*here*/
+  always @(posedge pwm_clk) begin
+    if(eop) begin 
+      dc0 <= data_channel_0;
+      dc1 <= data_channel_1;
+      dc2 <= data_channel_2;
+      dc3 <= data_channel_3;
+      dc4 <= data_channel_4;
+      dc5 <= data_channel_5;
+    end
+    else begin
+      dc0 <= dc0;
+      dc1 <= dc1;
+      dc2 <= dc2;
+      dc3 <= dc3;
+      dc4 <= dc4;
+      dc5 <= dc5;
+    end
+  end
 
 // continous assigment of the correct PWM value for the LEDs
 
  /*here*/
+  assign pwm_led_0 = pwml0;
+  assign pwm_led_1 = pwml1;
+  assign pwm_led_2 = pwml2;
+  assign pwm_led_3 = pwml3;
+  assign pwm_led_4 = pwml4;
+  assign pwm_led_5 = pwml5;
 
 endmodule
