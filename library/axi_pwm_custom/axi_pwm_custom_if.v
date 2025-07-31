@@ -144,7 +144,7 @@ end
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
- always @(posedge pwm_clk,negedge rstn) begin
+ always @(posedge pwm_clk or negedge rstn) begin
   if (~rstn) begin
     sample_0 <= 0;
     sample_1 <= 0;
@@ -152,16 +152,16 @@ end
     sample_3 <= 0;
     sample_4 <= 0;
     sample_5 <= 0;
+  end else if (end_of_period) begin
+    sample_0 <= data_channel_0;
+    sample_1 <= data_channel_1;
+    sample_2 <= data_channel_2;
+    sample_3 <= data_channel_3;
+    sample_4 <= data_channel_4;
+    sample_5 <= data_channel_5;
   end
-  if (end_of_period) begin
-    sample_0<=data_channel_0;
-    sample_1<=data_channel_1;
-    sample_2<=data_channel_2;
-    sample_3<=data_channel_3;
-    sample_4<=data_channel_4;
-    sample_5<=data_channel_5;
-  end
- end
+end
+
 
 
  /*here*/
