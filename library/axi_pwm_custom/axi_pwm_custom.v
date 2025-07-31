@@ -41,7 +41,12 @@ module axi_pwm_custom #(
   
 // 1.Create the pwm output signals 
 
-  output [5:0] pwm, 
+  output pwm_0,
+  output pwm_1,
+  output pwm_2,
+  output pwm_3,
+  output pwm_4,
+  output pwm_5,
 
   // axi interface
 
@@ -488,12 +493,12 @@ module axi_pwm_custom #(
     .data_channel_3(data_channel_3),
     .data_channel_4(data_channel_4),
     .data_channel_5(data_channel_5),
-    .pwm_led_0(pwm[0]),
-    .pwm_led_1(pwm[1]),
-    .pwm_led_2(pwm[2]),
-    .pwm_led_3(pwm[3]),
-    .pwm_led_4(pwm[4]),
-    .pwm_led_5(pwm[5])
+    .pwm_led_0(pwm_0),
+    .pwm_led_1(pwm_1),
+    .pwm_led_2(pwm_2),
+    .pwm_led_3(pwm_3),
+    .pwm_led_4(pwm_4),
+    .pwm_led_5(pwm_5)
   );
 
 endmodule
