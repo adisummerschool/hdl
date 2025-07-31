@@ -70,7 +70,7 @@ module axi_pwm_custom_if (
 
   // Create a counter from 0 to PULSE_PERIOD
 
-  always @(posedge pwm_clk, rstn)
+  always @(posedge pwm_clk, negedge rstn)
   begin
     if(~rstn)
       cnt <= 0;
@@ -121,7 +121,7 @@ module axi_pwm_custom_if (
 
   // make sure that the new data is processed only after the END_OF_PERIOD
 
-  always @(posedge pwm_clk, rstn)
+  always @(posedge pwm_clk, negedge rstn)
   begin
     if(~rstn)
     begin

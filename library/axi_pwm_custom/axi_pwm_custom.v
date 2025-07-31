@@ -187,7 +187,7 @@ module axi_pwm_custom #(
                    .adc_status_header ('b0),
                    .adc_crc_err ('b0),
                    .adc_softspan (),
-                   .adc_data_channel (data_channel_0/),  // Connect the samples data for CHANNEL 0
+                   .adc_data_channel (data_channel_0),  // Connect the samples data for CHANNEL 0
                    .up_adc_crc_err (),
                    .up_adc_pn_err (),
                    .up_adc_pn_oos (),
