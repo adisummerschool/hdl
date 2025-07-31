@@ -42,17 +42,17 @@ module axi_pwm_custom #(
 // 1.Create the pwm output signals 
 
   /*here*/
-  output wire pwm_led_0;
+  output wire pwm_led_0,
   /*here*/
-  output wire pwm_led_1;
+  output wire pwm_led_1,
   /*here*/
-  output wire pwm_led_2;
+  output wire pwm_led_2,
   /*here*/
-  output wire pwm_led_3;
+  output wire pwm_led_3,
   /*here*/
-  output wire pwm_led_4;
+  output wire pwm_led_4,
   /*here*/
-  output wire pwm_led_5;
+  output wire pwm_led_5,
 
   // axi interface
 
