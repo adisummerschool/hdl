@@ -182,7 +182,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (data_channel_0)),  // Connect the samples data for CHANNEL 0 
+    .adc_data_channel (data_channel_0),  // Connect the samples data for CHANNEL 0 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -210,7 +210,7 @@ module axi_pwm_custom #(
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
     .up_rdata (up_rdata_s[0]),
-    .up_rack  ( up_rack_s[0]); 
+    .up_rack  ( up_rack_s[0])); 
 
   up_adc_channel #(
     .CHANNEL_ID(1)
@@ -236,7 +236,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (data_channel_1)),  // Connect the samples data for CHANNEL 1 
+    .adc_data_channel (data_channel_1),  // Connect the samples data for CHANNEL 1 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -452,8 +452,8 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (data_channel_5)),  // Connect the samples data for CHANNEL 5
-    .up_adc_crc_err (),
+    .adc_data_channel (data_channel_5),  // Connect the samples data for CHANNEL 5
+    .up_adc_crc_err (), 
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
     .up_adc_or (),
@@ -497,7 +497,7 @@ module axi_pwm_custom #(
     .pwm_led_2 (pwm_led_2),
     .pwm_led_3 (pwm_led_3),
     .pwm_led_4 (pwm_led_4),
-    .pwm_led_5 (pwm_led_5);
+    .pwm_led_5 (pwm_led_5)
 
     /*here*/
   );
