@@ -184,7 +184,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 0 
+    .adc_data_channel (data_channel_0),  // Connect the samples data for CHANNEL 0 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -238,7 +238,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 1 
+    .adc_data_channel (data_channel_1),  // Connect the samples data for CHANNEL 1 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -292,7 +292,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 2 
+    .adc_data_channel (data_channel_2),  // Connect the samples data for CHANNEL 2 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -346,7 +346,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 3
+    .adc_data_channel (data_channel_3),  // Connect the samples data for CHANNEL 3
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -400,7 +400,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 4 
+    .adc_data_channel (data_channel_4),  // Connect the samples data for CHANNEL 4 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -454,7 +454,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (/*here*/),  // Connect the samples data for CHANNEL 5
+    .adc_data_channel (data_channel_5),  // Connect the samples data for CHANNEL 5
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
