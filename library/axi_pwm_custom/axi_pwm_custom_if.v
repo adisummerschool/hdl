@@ -1,39 +1,3 @@
-// ***************************************************************************
-// ***************************************************************************
-// Copyright 2014 - 2017 (c) Analog Devices, Inc. All rights reserved.
-//
-// In this HDL repository, there are many different and unique modules, consisting
-// of various HDL (Verilog or VHDL) components. The individual modules are
-// developed independently, and may be accompanied by separate and unique license
-// terms.
-//
-// The user should read each of these license terms, and understand the
-// freedoms and responsibilities that he or she has by using this source/core.
-//
-// This core is distributed in the hope that it will be useful, but WITHOUT ANY
-// WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-// A PARTICULAR PURPOSE.
-//
-// Redistribution and use of source or resulting binaries, with or without modification
-// of this file, are permitted under one of the following two license terms:
-//
-//   1. The GNU General Public License version 2 as published by the
-//      Free Software Foundation, which can be found in the top level directory
-//      of this repository (LICENSE_GPL2), and also online at:
-//      <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>
-//
-// OR
-//
-//   2. An ADI specific BSD license, which can be found in the top level directory
-//      of this repository (LICENSE_ADIBSD), and also on-line at:
-//      https://github.com/analogdevicesinc/hdl/blob/main/LICENSE_ADIBSD
-//      This will allow to generate bit files and not release the source code,
-//      as long as it attaches to an ADI device.
-//
-// ***************************************************************************
-// ***************************************************************************
-// This is the LVDS/DDR interface
-
 `timescale 1ns/100ps
 
 module axi_pwm_custom_if ( 
@@ -56,32 +20,51 @@ module axi_pwm_custom_if (
 
   localparam PULSE_PERIOD = 4095;
 
-// internal registers
+  reg [11:0] pwm_counter = 12'd0;
+  wire end_of_period;
+  assign end_of_period = (pwm_counter == 12'd4095)? 1'b1 : 1'b0;
 
-  /*here*/
+  // 1. Registri care salvează valorile DOAR după end_of_period
+  reg [11:0] latched_0 = 12'd0;
+  reg [11:0] latched_1 = 12'd0;
+  reg [11:0] latched_2 = 12'd0;
+  reg [11:0] latched_3 = 12'd0;
+  reg [11:0] latched_4 = 12'd0;
+  reg [11:0] latched_5 = 12'd0;
 
-// internal wires
+  always @(posedge pwm_clk ) begin
+    if (!rstn) begin
+      pwm_counter <= 12'd0;
+    end else begin
+      pwm_counter <= pwm_counter + 1'b1;
+  end
+end
 
-  /*here*/
+  // 2. Latch noua valoare DOAR la final de perioadă
+  always @(posedge pwm_clk) begin
+    if (!rstn) begin
+      latched_0 <= 12'd0;
+      latched_1 <= 12'd0;
+      latched_2 <= 12'd0;
+      latched_3 <= 12'd0;
+      latched_4 <= 12'd0;
+      latched_5 <= 12'd0;
+    end else if (end_of_period) begin
+      latched_0 <= data_channel_0;
+      latched_1 <= data_channel_1;
+      latched_2 <= data_channel_2;
+      latched_3 <= data_channel_3;
+      latched_4 <= data_channel_4;
+      latched_5 <= data_channel_5;
+    end
+  end
 
-// generate a signal named end_of_period which has '1' logic value at the end of the signal period
-
-  /*here*/
-
-// Create a counter from 0 to PULSE_PERIOD
-
-  /*here*/
-
-// control the pwm signal value based on the input signal and counter value
-
-  /*here*/
-
-// make sure that the new data is processed only after the END_OF_PERIOD
-
-  /*here*/
-
-// continous assigment of the correct PWM value for the LEDs
-
- /*here*/
+  // 3. Compară counterul cu valorile stabilizate
+  assign pwm_led_0 = (pwm_counter < latched_0);
+  assign pwm_led_1 = (pwm_counter < latched_1);
+  assign pwm_led_2 = (pwm_counter < latched_2);
+  assign pwm_led_3 = (pwm_counter < latched_3);
+  assign pwm_led_4 = (pwm_counter < latched_4);
+  assign pwm_led_5 = (pwm_counter < latched_5);
 
 endmodule
