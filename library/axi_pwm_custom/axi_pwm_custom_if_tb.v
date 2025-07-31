@@ -67,7 +67,7 @@ module axi_pwm_custom_if_tb;
   // test the reset functionality
 
   initial begin
-    #1 resetn_in = 1'b1;
+    #100 resetn_in = 1'b1;
   end
 
   // generates a sawtooth signal which increments once at 4096 clock periods to test the functionality 
