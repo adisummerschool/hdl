@@ -36,52 +36,143 @@
 
 `timescale 1ns/100ps
 
-module axi_pwm_custom_if ( 
+module axi_pwm_custom_if (
 
-  input            pwm_clk,
-  input            rstn,
-  input    [11:0]  data_channel_0,
-  input    [11:0]  data_channel_1,
-  input    [11:0]  data_channel_2,
-  input    [11:0]  data_channel_3,
-  input    [11:0]  data_channel_4,
-  input    [11:0]  data_channel_5,
-  output           pwm_led_0,
-  output           pwm_led_1,
-  output           pwm_led_2,
-  output           pwm_led_3,
-  output           pwm_led_4,
-  output           pwm_led_5
-);
+    input            pwm_clk,
+    input            rstn,
+    input    [11:0]  data_channel_0,
+    input    [11:0]  data_channel_1,
+    input    [11:0]  data_channel_2,
+    input    [11:0]  data_channel_3,
+    input    [11:0]  data_channel_4,
+    input    [11:0]  data_channel_5,
+    output           pwm_led_0,
+    output           pwm_led_1,
+    output           pwm_led_2,
+    output           pwm_led_3,
+    output           pwm_led_4,
+    output           pwm_led_5
+  );
 
   localparam PULSE_PERIOD = 4095;
 
-// internal registers
+  // internal registers
 
-  /*here*/
+  reg [11:0] pwm_counter = 12'd0;
+  reg [11:0] pwm_value_0, pwm_value_1, pwm_value_2,pwm_value_3,pwm_value_4,pwm_value_5;
+  reg pwm_output_0, pwm_output_1, pwm_output_2, pwm_output_3, pwm_output_4, pwm_output_5;
+  // internal wires
 
-// internal wires
 
-  /*here*/
+  // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
-// generate a signal named end_of_period which has '1' logic value at the end of the signal period
+  wire end_period;
+  assign end_period = (pwm_counter == PULSE_PERIOD);
 
-  /*here*/
+  // Create a counter from 0 to PULSE_PERIOD
 
-// Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
+  always @(posedge pwm_clk)
+  begin
+    if (!rstn)
+      pwm_counter <= 12'd0;
+    else if (end_period)
+      pwm_counter <= 12'd0;
+    else
+      pwm_counter <= pwm_counter + 12'd1;
+  end
 
-// control the pwm signal value based on the input signal and counter value
+  // control the pwm signal value based on the input signal and counter value
 
-  /*here*/
+  always @(posedge pwm_clk )
+  begin
 
-// make sure that the new data is processed only after the END_OF_PERIOD
+    if(!rstn)
+    begin
 
-  /*here*/
+      pwm_output_0 <= 1'b0;
+      pwm_output_1 <= 1'b0;
+      pwm_output_2 <= 1'b0;
+      pwm_output_3 <= 1'b0;
+      pwm_output_4 <= 1'b0;
+      pwm_output_5 <= 1'b0;
+      pwm_counter <= 12'b0;
 
-// continous assigment of the correct PWM value for the LEDs
+    end
+    else
+    begin
 
- /*here*/
+
+
+
+      if (pwm_counter < pwm_value_0)
+        pwm_output_0 <= 1'b1;
+      else
+        pwm_output_0 <= 1'b0;
+
+      if (pwm_counter < pwm_value_1)
+        pwm_output_1 <= 1'b1;
+      else
+        pwm_output_1 <= 1'b0;
+
+      if (pwm_counter < pwm_value_2)
+        pwm_output_2 <= 1'b1;
+      else
+        pwm_output_2 <= 1'b0;
+
+      if (pwm_counter < pwm_value_3)
+        pwm_output_3 <= 1'b1;
+      else
+        pwm_output_3 <= 1'b0;
+
+      if (pwm_counter < pwm_value_4)
+        pwm_output_4 <= 1'b1;
+      else
+        pwm_output_4 <= 1'b0;
+
+      if (pwm_counter < pwm_value_5)
+        pwm_output_5 <= 1'b1;
+      else
+        pwm_output_5 <= 1'b0;
+
+
+    end
+  end
+
+  // make sure that the new data is processed only after the END_OF_PERIOD
+
+  always @(posedge pwm_clk)
+  begin
+    if (end_period)
+    begin
+
+
+      pwm_value_0 <= data_channel_0;
+      pwm_value_1 <= data_channel_1;
+      pwm_value_2 <= data_channel_2;
+      pwm_value_3 <= data_channel_3;
+      pwm_value_4 <= data_channel_4;
+      pwm_value_5 <= data_channel_5;
+    end else begin
+      pwm_value_0 <= pwm_value_0;
+      pwm_value_1 <= pwm_value_1;
+      pwm_value_2 <= pwm_value_2;
+      pwm_value_3 <= pwm_value_3;
+      pwm_value_4 <= pwm_value_4;
+      pwm_value_5 <= pwm_value_5;
+
+    end
+
+
+  end
+
+  // continous assigment of the correct PWM value for the LEDs
+
+  assign pwm_led_0 = pwm_output_0;
+  assign pwm_led_1 = pwm_output_1;
+  assign pwm_led_2 = pwm_output_2;
+  assign pwm_led_3 = pwm_output_3;
+  assign pwm_led_4 = pwm_output_4;
+  assign pwm_led_5 = pwm_output_5;
 
 endmodule
