@@ -36,52 +36,115 @@
 
 `timescale 1ns/100ps
 
-module axi_pwm_custom_if ( 
+module axi_pwm_custom_if (
 
-  input            pwm_clk,
-  input            rstn,
-  input    [11:0]  data_channel_0,
-  input    [11:0]  data_channel_1,
-  input    [11:0]  data_channel_2,
-  input    [11:0]  data_channel_3,
-  input    [11:0]  data_channel_4,
-  input    [11:0]  data_channel_5,
-  output           pwm_led_0,
-  output           pwm_led_1,
-  output           pwm_led_2,
-  output           pwm_led_3,
-  output           pwm_led_4,
-  output           pwm_led_5
-);
+    input            pwm_clk,
+    input            rstn,
+    input    [11:0]  data_channel_0,
+    input    [11:0]  data_channel_1,
+    input    [11:0]  data_channel_2,
+    input    [11:0]  data_channel_3,
+    input    [11:0]  data_channel_4,
+    input    [11:0]  data_channel_5,
+    output   reg        pwm_led_0,
+    output   reg        pwm_led_1,
+    output   reg        pwm_led_2,
+    output   reg        pwm_led_3,
+    output   reg        pwm_led_4,
+    output   reg        pwm_led_5
+  );
 
   localparam PULSE_PERIOD = 4095;
 
-// internal registers
+  // internal registers
+
+  reg [11:0] cnt, samp0, samp1, samp2, samp3, samp4, samp5;
+
+  // internal wires
+
+  wire end_of_period;
+
+  // generate a signal named end_of_period which has '1' logic value at the end of the signal period
+
+  assign end_of_period = (cnt == PULSE_PERIOD);
+
+  // Create a counter from 0 to PULSE_PERIOD
+
+  always @(posedge pwm_clk, rstn)
+  begin
+    if(~rstn)
+      cnt <= 0;
+    else
+    begin
+      if (cnt < PULSE_PERIOD)
+        cnt <= cnt + 12'd1;
+      else
+        cnt <= 0;
+    end
+  end
+
+  // control the pwm signal value based on the input signal and counter value
+
+  always @(*)
+  begin
+    if(samp0 >= cnt)
+      pwm_led_0 = 1'b1;
+    else
+      pwm_led_0 = 1'b0;
+
+    if(samp1 >= cnt)
+      pwm_led_1 = 1'b1;
+    else
+      pwm_led_1 = 1'b0;
+
+    if(samp2 >= cnt)
+      pwm_led_2 = 1'b1;
+    else
+      pwm_led_2 = 1'b0;
+
+    if(samp3 >= cnt)
+      pwm_led_3 = 1'b1;
+    else
+      pwm_led_3 = 1'b0;
+
+    if(samp4 >= cnt)
+      pwm_led_4 <= 1'b1;
+    else
+      pwm_led_4 = 1'b0;
+
+    if(samp5 >= cnt)
+      pwm_led_5 = 1'b1;
+    else
+      pwm_led_5 = 1'b0;
+
+  end
+
+  // make sure that the new data is processed only after the END_OF_PERIOD
+
+  always @(posedge pwm_clk, rstn)
+  begin
+    if(~rstn)
+    begin
+      samp0 <= 0;
+      samp1 <= 0;
+      samp2 <= 0;
+      samp3 <= 0;
+      samp4 <= 0;
+      samp5 <= 0;
+    end
+    else if(end_of_period == 1'b1)
+    begin
+      samp0 <= data_channel_0;
+      samp1 <= data_channel_1;
+      samp2 <= data_channel_2;
+      samp3 <= data_channel_3;
+      samp4 <= data_channel_4;
+      samp5 <= data_channel_5;
+    end
+  end
+
+  // continous assigment of the correct PWM value for the LEDs
 
   /*here*/
-
-// internal wires
-
-  /*here*/
-
-// generate a signal named end_of_period which has '1' logic value at the end of the signal period
-
-  /*here*/
-
-// Create a counter from 0 to PULSE_PERIOD
-
-  /*here*/
-
-// control the pwm signal value based on the input signal and counter value
-
-  /*here*/
-
-// make sure that the new data is processed only after the END_OF_PERIOD
-
-  /*here*/
-
-// continous assigment of the correct PWM value for the LEDs
-
- /*here*/
 
 endmodule
