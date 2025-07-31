@@ -42,11 +42,12 @@ module axi_pwm_custom #(
 // 1.Create the pwm output signals 
 
   /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
-  /*here*/
+  output pwm_led0,
+  output pwm_led1,
+  output pwm_led2,
+  output pwm_led3,
+  output pwm_led4,
+  output pwm_led5,
 
   // axi interface
 
@@ -486,6 +487,9 @@ module axi_pwm_custom #(
   // Add the interface module and connect it to the samples data and output ports
   axi_pwm_custom_if i_if_axi_pwm_custom (
     /*here*/
+    pwm_clk, up_rstn, data_channel_0, data_channel_1, data_channel_2,
+    data_channel_3, data_channel_4, data_channel_5, pwm_led0, pwm_led1,
+    pwm_led2, pwm_led3, pwm_led4, pwm_led5
   );
 
 endmodule
