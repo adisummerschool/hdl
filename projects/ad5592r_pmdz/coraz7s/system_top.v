@@ -176,9 +176,9 @@ module system_top (
     .pwm_led_0_r(pwm_led_0_r),
     .pwm_led_0_g(pwm_led_0_g),
     .pwm_led_0_b(pwm_led_0_b),
-    .pwm_led_0_r(pwm_led_1_r),
-    .pwm_led_0_g(pwm_led_1_g),
-    .pwm_led_0_b(pwm_led_1_b)
+    .pwm_led_1_r(pwm_led_1_r),
+    .pwm_led_1_g(pwm_led_1_g),
+    .pwm_led_1_b(pwm_led_1_b)
     );
 
 endmodule
