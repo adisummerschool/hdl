@@ -174,8 +174,8 @@ module system_top (
     .spi1_sdo_o (),
 // 1. Declare the block design ports and connect them to the PWM wires 
     .pwm_led_0_r(pwm_led_0_r),
-    .pwm_led_0_g(pwm_led_0_G),
-    .pwm_led_0_b(pwm_led_0_B),
+    .pwm_led_0_g(pwm_led_0_g),
+    .pwm_led_0_b(pwm_led_0_b),
 
     .pwm_led_1_r(pwm_led_1_r),
     .pwm_led_1_g(pwm_led_1_g),

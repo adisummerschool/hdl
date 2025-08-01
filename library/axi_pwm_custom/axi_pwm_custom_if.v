@@ -158,7 +158,7 @@ end
     aux_pwm_led_3 <= 1'b0;
   
   end
-  
+
   if(internal4 > count) begin
   
     aux_pwm_led_4 <= 1'b1;
