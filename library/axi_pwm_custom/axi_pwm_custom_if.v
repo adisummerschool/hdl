@@ -84,7 +84,7 @@ module axi_pwm_custom_if (
 
 // Create a counter from 0 to PULSE_PERIOD
   
-  always @(posedge pwm_clk or negedge rstn) begin
+  always @(posedge pwm_clk) begin
     if (rstn == 1'b0) begin
       counter<= 12'd0;
     end else if (end_of_period) begin
