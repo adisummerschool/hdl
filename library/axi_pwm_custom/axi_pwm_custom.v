@@ -40,12 +40,12 @@ module axi_pwm_custom #(
 ) (
   
 
-output  pwm_led_0;
-output  pwm_led_1;
-output  pwm_led_2;
-output  pwm_led_3;
-output  pwm_led_4;
-output  pwm_led_5;
+output  pwm_led_0,
+output  pwm_led_1,
+output  pwm_led_2,
+output  pwm_led_3,
+output  pwm_led_4,
+output  pwm_led_5,
 
 // 1.Create the pwm output signals 
 
@@ -507,7 +507,7 @@ output  pwm_led_5;
     .pwm_led_3 (pwm_led_3),
     .pwm_led_4 (pwm_led_4),
     .pwm_led_5(pwm_led_5),
-    .rstn(rstn);
+    .rstn(rstn)
     
   );
 

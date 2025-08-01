@@ -11,7 +11,7 @@ set_property -dict { PACKAGE_PIN Y17  IOSTANDARD LVCMOS33 } [get_ports { sclk }]
 #set_property -dict { PACKAGE_PIN W18  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L22P_T3_34 Sch=ja_p[4]              
 #set_property -dict { PACKAGE_PIN W19  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L22N_T3_34 Sch=ja_n[4]              
                                                                                                                                                                                                                                                            
-##Pmod Header JB   SNIFFING PMOD CONNECTOR
+##Pmod Header JB   SNIFFING PMOD CONNECTORadc
 
 set_property -dict { PACKAGE_PIN W14  IOSTANDARD LVCMOS33  } [get_ports { sniffing_cs }]; #IO_L8P_T1_34 Sch=jb_p[1]                  
 set_property -dict { PACKAGE_PIN Y14  IOSTANDARD LVCMOS33  } [get_ports { sniffing_mosi }]; #IO_L8N_T1_34 Sch=jb_n[1]				 
