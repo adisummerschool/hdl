@@ -2,18 +2,18 @@
     # command example: create_bd_port -dir O example led
 
   #here
-  create_bd_port -dir O pwm_led0
+  create_bd_port -dir O pwm_led_0_r
   #here
-  create_bd_port -dir O pwm_led1
+  create_bd_port -dir O pwm_led_0_g
   #here
-  create_bd_port -dir O pwm_led2
+  create_bd_port -dir O pwm_led_0_b
 
   #here
-  create_bd_port -dir O pwm_led3
+  create_bd_port -dir O pwm_led_1_r
   #here
-  create_bd_port -dir O pwm_led4
+  create_bd_port -dir O pwm_led_1_g
   #here
-  create_bd_port -dir O pwm_led5
+  create_bd_port -dir O pwm_led_1_b
 
 # 2. add axi_pwm_custom IP using ad_ip_instance command
 
