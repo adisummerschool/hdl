@@ -486,7 +486,7 @@ module axi_pwm_custom #(
   // Add the interface module and connect it to the samples data and output ports
   axi_pwm_custom_if i_if_axi_pwm_custom (
    pwm_clk,
-   adc_rst,
+   up_rst,
    data_channel_0,
    data_channel_1,
    data_channel_2,
