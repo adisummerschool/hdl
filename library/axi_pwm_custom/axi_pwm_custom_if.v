@@ -36,7 +36,7 @@
 
 `timescale 1ns/100ps
 
-module axi_pwm_custom_if ( 
+module axi_pwm_custom_if (
 
   input            pwm_clk,
   input            rstn,
@@ -56,32 +56,80 @@ module axi_pwm_custom_if (
 
   localparam PULSE_PERIOD = 4095;
 
-// internal registers
+  // internal registers
 
-  /*here*/
+  reg [11:0] period_counter = 12'b0;
 
-// internal wires
+  reg [11:0] data_channel_0_valid = 12'b0;
+  reg [11:0] data_channel_1_valid = 12'b0;
+  reg [11:0] data_channel_2_valid = 12'b0;
+  reg [11:0] data_channel_3_valid = 12'b0;
+  reg [11:0] data_channel_4_valid = 12'b0;
+  reg [11:0] data_channel_5_valid = 12'b0;
 
-  /*here*/
+  reg        pwm_led_0_aux = 1'b0;
+  reg        pwm_led_1_aux = 1'b0;
+  reg        pwm_led_2_aux = 1'b0;
+  reg        pwm_led_3_aux = 1'b0;
+  reg        pwm_led_4_aux = 1'b0;
+  reg        pwm_led_5_aux = 1'b0;
 
-// generate a signal named end_of_period which has '1' logic value at the end of the signal period
+  // internal wires
 
-  /*here*/
+  wire       end_of_period;
 
-// Create a counter from 0 to PULSE_PERIOD
+  // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
-  /*here*/
+  assign end_of_period = (period_counter == 12'd4095) ? 1'b1 : 1'b0;
 
-// control the pwm signal value based on the input signal and counter value
+  // Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
+  always @(posedge pwm_clk) begin
+    if (end_of_period || !rstn) begin
+      period_counter <= 12'b0;
+    end else begin
+      period_counter <= period_counter + 1;
+    end
+  end
 
-// make sure that the new data is processed only after the END_OF_PERIOD
+  // control the pwm signal value based on the input signal and counter value
 
-  /*here*/
+  always @(posedge pwm_clk) begin
+    pwm_led_0_aux <= (!rstn || data_channel_0_valid > period_counter) ? 1'b1 : 1'b0;
+    pwm_led_1_aux <= (!rstn || data_channel_1_valid > period_counter) ? 1'b1 : 1'b0;
+    pwm_led_2_aux <= (!rstn || data_channel_2_valid > period_counter) ? 1'b1 : 1'b0;
+    pwm_led_3_aux <= (!rstn || data_channel_3_valid > period_counter) ? 1'b1 : 1'b0;
+    pwm_led_4_aux <= (!rstn || data_channel_4_valid > period_counter) ? 1'b1 : 1'b0;
+    pwm_led_5_aux <= (!rstn || data_channel_5_valid > period_counter) ? 1'b1 : 1'b0;
+  end
 
-// continous assigment of the correct PWM value for the LEDs
+  // make sure that the new data is processed only after the END_OF_PERIOD
 
- /*here*/
+  always @(posedge pwm_clk) begin
+    if (end_of_period || !rstn) begin
+      data_channel_0_valid <= data_channel_0;
+      data_channel_1_valid <= data_channel_1;
+      data_channel_2_valid <= data_channel_2;
+      data_channel_3_valid <= data_channel_3;
+      data_channel_4_valid <= data_channel_4;
+      data_channel_5_valid <= data_channel_5;
+    end else begin
+      data_channel_0_valid <= data_channel_0_valid;
+      data_channel_1_valid <= data_channel_1_valid;
+      data_channel_2_valid <= data_channel_2_valid;
+      data_channel_3_valid <= data_channel_3_valid;
+      data_channel_4_valid <= data_channel_4_valid;
+      data_channel_5_valid <= data_channel_5_valid;
+    end
+  end
+
+  // assign the correct PWM value for the LEDs
+
+  assign pwm_led_0 = pwm_led_0_aux;
+  assign pwm_led_1 = pwm_led_1_aux;
+  assign pwm_led_2 = pwm_led_2_aux;
+  assign pwm_led_3 = pwm_led_3_aux;
+  assign pwm_led_4 = pwm_led_4_aux;
+  assign pwm_led_5 = pwm_led_5_aux;
 
 endmodule
