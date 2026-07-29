@@ -43,4 +43,32 @@ module verilog_task_testbench (
   output   [11:0]  triangle_wave
 );
 
+reg [11:0] wave;
+reg edgeDir;
+always @ (posedge ref_clk) begin
+  if(rstn == 1'b0) begin
+    wave <= 12'd0;
+    edgeDir <= 1'b0;
+  end
+  else begin
+    if(edgeDir == 0) begin
+      if(edgeDir == 1'b0 && wave < 12'hff) begin
+        wave <= wave + 1'b1;
+      end
+      else begin
+        edgeDir = 1;
+      end
+    end
+    else begin
+      if(wave > 0 && edgeDir == 1) begin
+        wave <= wave - 1;
+      end
+      else begin
+        edgeDir = 0;
+      end
+    end
+  end
+end 
+assign triangle_wave = wave;
+
 endmodule
