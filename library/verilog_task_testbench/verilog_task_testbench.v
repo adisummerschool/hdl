@@ -33,14 +33,43 @@
 // ***************************************************************************
 // ***************************************************************************
 // This is the LVDS/DDR interface
-
 `timescale 1ns/100ps
 
-module verilog_task_testbench ( 
-
-  input            ref_clk,
-  input            rstn,
-  output   [11:0]  triangle_wave
+module verilog_task_testbench (
+    input             ref_clk,
+    input             rstn,
+    output reg [11:0] triangle_wave
 );
+
+    reg dir; 
+
+    always @(posedge ref_clk) begin
+        if (!rstn) begin
+            triangle_wave <= 12'h000;
+            dir  <= 1'b0;
+            end
+
+        else if (dir == 1'b0) begin
+            if (triangle_wave == 12'hFFF) begin
+                dir <= 1'b1;
+                triangle_wave <= triangle_wave - 12'd1;
+            end
+            else begin
+                triangle_wave <= triangle_wave + 12'd1;
+            end
+        end
+
+        else begin
+            if (triangle_wave == 12'h000) begin
+                dir<= 1'b0;
+                triangle_wave <= triangle_wave + 12'd1;
+            end
+            else begin
+                triangle_wave <= triangle_wave - 12'd1;
+            end
+        end
+
+
+    end
 
 endmodule

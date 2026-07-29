@@ -39,5 +39,18 @@ module verilog_task_testbench_tb;
   parameter VCD_FILE = "verilog_task_testbench_tb.vcd";
 
   `define TIMEOUT 900
+  reg clk;
+  reg rstn;
+  wire [11:0] triangle;
+
+  verilog_task_testbench instance1(clk,rstn,triangle);
+
+  initial begin
+    clk <= 1'b0;
+    rstn <= 1'b0;
+  end
+  always #5 clk <= ~clk;
+  always #10000000 rstn <= ~rstn;
+
 
 endmodule
