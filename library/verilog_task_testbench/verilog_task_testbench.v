@@ -43,4 +43,34 @@ module verilog_task_testbench (
   output   [11:0]  triangle_wave
 );
 
+  reg [11:0] triangle_wave_reg;
+
+  reg dir;   
+
+  always @(posedge ref_clk) begin
+      if(!rstn) begin
+          triangle_wave_reg <= 0;
+          dir <= 0;
+      end
+      else begin
+          if(!dir) begin
+              if(triangle_wave_reg == 4095) begin
+                  dir <= 1;
+                  triangle_wave_reg <= triangle_wave_reg - 1;
+              end
+              else
+                  triangle_wave_reg <= triangle_wave_reg + 1;
+          end
+          else begin
+              if(triangle_wave_reg == 0) begin
+                  dir <= 0;
+                  triangle_wave_reg <= triangle_wave_reg + 1;
+              end
+              else
+                  triangle_wave_reg <= triangle_wave_reg - 1;
+          end
+      end
+  end
+
+  assign triangle_wave = triangle_wave_reg;
 endmodule
