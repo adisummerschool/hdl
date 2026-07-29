@@ -59,29 +59,72 @@ module axi_pwm_custom_if (
 // internal registers
 
   /*here*/
+reg[11:0] channel_0_value;
+reg[11:0] channel_1_value;
+reg[11:0] channel_2_value;
+reg[11:0] channel_3_value;
+reg[11:0] channel_4_value;
+reg[11:0] channel_5_value;
+reg[11:0] counter_value;
+reg compare_channel_0;
+reg compare_channel_1;
+reg compare_channel_2;
+reg compare_channel_3;
+reg compare_channel_4;
+reg compare_channel_5;
 
 // internal wires
-
-  /*here*/
+wire end_of_period;
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
-
-  /*here*/
+assign end_of_period = &(counter_value);
 
 // Create a counter from 0 to PULSE_PERIOD
-
-  /*here*/
+always @(posedge pwm_clk) begin
+  if (~rstn) begin
+    counter_value <= 12'b0;
+  end else begin
+    counter_value <= (counter_value < 12'Hfff) ? counter_value + 1 : 12'H000;
+  end
+end
 
 // control the pwm signal value based on the input signal and counter value
-
-  /*here*/
+always @(posedge pwm_clk) begin
+  if(~rstn) begin
+    compare_channel_0 <= 1;
+    compare_channel_1 <= 1;
+    compare_channel_2 <= 1;
+    compare_channel_3 <= 1;
+    compare_channel_4 <= 1;
+    compare_channel_5 <= 1;
+  end else begin
+    compare_channel_0 <= (channel_0_value > counter_value) ? 1 : 0;
+    compare_channel_1 <= (channel_1_value > counter_value) ? 1 : 0;
+    compare_channel_2 <= (channel_2_value > counter_value) ? 1 : 0;
+    compare_channel_3 <= (channel_3_value > counter_value) ? 1 : 0;
+    compare_channel_4 <= (channel_4_value > counter_value) ? 1 : 0;
+    compare_channel_5 <= (channel_5_value > counter_value) ? 1 : 0;
+  end
+end
 
 // make sure that the new data is processed only after the END_OF_PERIOD
-
-  /*here*/
+always @(posedge pwm_clk) begin
+  if (end_of_period || ~rstn) begin
+    channel_0_value <= data_channel_0;
+    channel_1_value <= data_channel_1;
+    channel_2_value <= data_channel_2;
+    channel_3_value <= data_channel_3;
+    channel_4_value <= data_channel_4;
+    channel_5_value <= data_channel_5;
+  end
+end
 
 // continous assigment of the correct PWM value for the LEDs
-
- /*here*/
+assign pwm_led_0 = compare_channel_0;
+assign pwm_led_1 = compare_channel_1;
+assign pwm_led_2 = compare_channel_2;
+assign pwm_led_3 = compare_channel_3;
+assign pwm_led_4 = compare_channel_4;
+assign pwm_led_5 = compare_channel_5;
 
 endmodule
