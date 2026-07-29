@@ -57,31 +57,85 @@ module axi_pwm_custom_if (
   localparam PULSE_PERIOD = 4095;
 
 // internal registers
+  reg [11:0] pwm_0_th;
+  reg [11:0] pwm_1_th;
+  reg [11:0] pwm_2_th;
+  reg [11:0] pwm_3_th;
+  reg [11:0] pwm_4_th;
+  reg [11:0] pwm_5_th;
 
-  /*here*/
-
-// internal wires
-
-  /*here*/
+  reg pwm_0_th_next;
+  reg pwm_1_th_next;
+  reg pwm_2_th_next; 
+  reg pwm_3_th_next;
+  reg pwm_4_th_next;
+  reg pwm_5_th_next;
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
+  reg end_of_period;
+  reg [11:0] pulse_counter;
 
-  /*here*/
+  always @(posedge pwm_clk or negedge rstn) 
+  begin
+    if (!rstn) begin
+      end_of_period <= 1'b0;
+    end else if (pulse_counter == PULSE_PERIOD) begin 
+      end_of_period <= 1'b1;
+    end else begin
+      end_of_period <= 1'b0;
+    end
+  end
 
 // Create a counter from 0 to PULSE_PERIOD
-
-  /*here*/
+  always @(posedge pwm_clk) 
+  begin
+    if (!rstn) begin
+      pulse_counter <= 12'd0;
+    end else if (pulse_counter == PULSE_PERIOD) begin
+      pulse_counter <= 12'd0;
+    end else begin
+      pulse_counter <= pulse_counter + 1'b1;
+    end
+  end
 
 // control the pwm signal value based on the input signal and counter value
+  always @(posedge pwm_clk) begin
+    if (!rstn) begin
+      pwm_0_th_next <= 1'b1;
+      pwm_1_th_next <= 1'b1;
+      pwm_2_th_next <= 1'b1;
+      pwm_3_th_next <= 1'b1;
+      pwm_4_th_next <= 1'b1;
+      pwm_5_th_next <= 1'b1;
+    end else begin
+      pwm_0_th_next <= (pulse_counter < pwm_0_th) ? 1'b1 : 1'b0;
+      pwm_1_th_next <= (pulse_counter < pwm_1_th) ? 1'b1 : 1'b0;
+      pwm_2_th_next <= (pulse_counter < pwm_2_th) ? 1'b1 : 1'b0;
+      pwm_3_th_next <= (pulse_counter < pwm_3_th) ? 1'b1 : 1'b0;
+      pwm_4_th_next <= (pulse_counter < pwm_4_th) ? 1'b1 : 1'b0;
+      pwm_5_th_next <= (pulse_counter < pwm_5_th) ? 1'b1 : 1'b0;
+    end
+  end
 
-  /*here*/
-
-// make sure that the new data is processed only after the END_OF_PERIOD
-
-  /*here*/
+  //make sure the pwm threshold values are updated at the end of each period
+  always @(posedge pwm_clk) begin
+    if (!rstn || end_of_period) 
+    begin
+      pwm_0_th <= data_channel_0;
+      pwm_1_th <= data_channel_1;
+      pwm_2_th <= data_channel_2;
+      pwm_3_th <= data_channel_3;
+      pwm_4_th <= data_channel_4;
+      pwm_5_th <= data_channel_5;
+    end 
+  end
 
 // continous assigment of the correct PWM value for the LEDs
-
- /*here*/
+  assign pwm_led_0 = pwm_0_th_next;
+  assign pwm_led_1 = pwm_1_th_next;
+  assign pwm_led_2 = pwm_2_th_next;
+  assign pwm_led_3 = pwm_3_th_next;
+  assign pwm_led_4 = pwm_4_th_next;
+  assign pwm_led_5 = pwm_5_th_next;
 
 endmodule
