@@ -40,7 +40,35 @@ module verilog_task_testbench (
 
   input            ref_clk,
   input            rstn,
-  output   [11:0]  triangle_wave
+  output reg  [11:0]  triangle_wave
 );
 
+  parameter max_count = 12'd4095;
+  parameter COUNT_UP = 1'b0, COUNT_DOWN = 1'b1;
+  reg flag = 1'b0;
+  reg [11:0]counter = 12'h0;
+
+  always@(posedge ref_clk) begin
+    if(rstn == 0) begin
+      triangle_wave <= 12'h0;
+      counter <= 12'h0;
+    end
+    else begin
+
+      case(flag)
+        COUNT_UP: begin
+          if(counter == max_count) flag <= ~flag;
+          else counter <= counter + 1;
+        end
+        COUNT_DOWN: begin
+          if(counter == 12'h0) flag <= ~flag;
+          else counter <= counter - 1;
+        end
+      endcase
+
+      triangle_wave <= counter;
+
+    end
+
+  end
 endmodule
