@@ -40,4 +40,25 @@ module verilog_task_testbench_tb;
 
   `define TIMEOUT 900
 
+  reg clk;
+  reg rstn;
+  wire [11:0] out;
+
+  initial begin
+    rstn <= 1'b1;
+    clk <= 1'b0;
+
+    forever begin
+      #1 clk <= ~clk;
+    end
+
+  end
+
+  verilog_task_testbench tb1 (clk, rstn, out);
+
+initial begin
+     #100000 $finish;
+end
+
 endmodule
+
