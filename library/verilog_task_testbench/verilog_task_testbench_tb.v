@@ -36,8 +36,26 @@
 `timescale 1ns/100ps
 
 module verilog_task_testbench_tb;
-  parameter VCD_FILE = "verilog_task_testbench_tb.vcd";
+  
+  reg clk;
+  reg rstn;
+  wire [11:0] triangle_wave;
 
-  `define TIMEOUT 900
+  initial begin
+    clk <= 0;
+    forever begin
+      #10 clk <= ~clk;
+    end
+  end
 
+  initial begin
+    rstn <= 0;
+    @(posedge clk) rstn <= 1;
+  end
+
+  verilog_task_testbench inst (.ref_clk(clk), .rstn(rstn), .triangle_wave(triangle_wave));
+
+  initial begin
+#100000 $finish();
+  end
 endmodule
