@@ -58,7 +58,20 @@ module axi_pwm_custom_if (
 
 // internal registers
 
-  /*here*/
+  reg   [11:0]    reg_adc_0;
+  reg   [11:0]    reg_adc_1;
+  reg   [11:0]    reg_adc_2;
+  reg   [11:0]    reg_adc_3;
+  reg   [11:0]    reg_adc_4;
+  reg   [11:0]    reg_adc_5;
+  reg   [11:0]    counter;
+  reg             end_of_period;
+  reg             pwm_out_0;
+  reg             pwm_out_1;
+  reg             pwm_out_2;
+  reg             pwm_out_3;
+  reg             pwm_out_4;
+  reg             pwm_out_5;
 
 // internal wires
 
@@ -66,22 +79,94 @@ module axi_pwm_custom_if (
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
-  /*here*/
+  always @ (posedge pwm_clk) begin
+    if (counter == PULSE_PERIOD && rstn) begin
+      end_of_period <= 1;
+    end else begin
+      end_of_period <= 0;
+    end
+  end
 
 // Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
+  always @ (posedge pwm_clk) begin
+    if (rstn) begin
+      counter <= counter + 1;
+    end
+    else begin
+      counter <= 0;
+    end
+  end
 
 // control the pwm signal value based on the input signal and counter value
 
-  /*here*/
+  always @ (posedge pwm_clk) begin
+    //  channel 0
+    if (counter < reg_adc_0 || !rstn) begin
+      // keep output high
+        pwm_out_0 <= 1;
+    end else begin
+        pwm_out_0 <= 0;
+    end
+    //  channel 1
+    if (counter < reg_adc_1 || !rstn) begin
+        pwm_out_1 <= 1;
+    end else begin
+        pwm_out_1 <= 0;
+    end
+    //  channel 2
+     if (counter < reg_adc_2 || !rstn) begin
+        pwm_out_2 <= 1;
+    end else begin
+        pwm_out_2 <= 0;
+    end
+    //  channel 3
+     if (counter < reg_adc_3 || !rstn) begin
+        pwm_out_3 <= 1;
+    end else begin
+        pwm_out_3 <= 0;
+    end
+    //  channel 4
+       if (counter < reg_adc_4 || !rstn) begin
+        pwm_out_4 <= 1;
+    end else begin
+        pwm_out_4 <= 0;
+    end
+    //  channel 5
+       if (counter < reg_adc_5 || !rstn) begin
+        pwm_out_5 <= 1;
+    end else begin
+        pwm_out_5 <= 0;
+    end
+  end
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
-  /*here*/
+  always @ (posedge pwm_clk) begin
+    if (!rstn) begin
+      reg_adc_0 <= data_channel_0;
+      reg_adc_1 <= data_channel_1;
+      reg_adc_2 <= data_channel_2;
+      reg_adc_3 <= data_channel_3;
+      reg_adc_4 <= data_channel_4;
+      reg_adc_5 <= data_channel_5;
+    end else if (end_of_period) begin
+      reg_adc_0 <= data_channel_0;
+      reg_adc_1 <= data_channel_1;
+      reg_adc_2 <= data_channel_2;
+      reg_adc_3 <= data_channel_3;
+      reg_adc_4 <= data_channel_4;
+      reg_adc_5 <= data_channel_5;
+    end
+  end
 
 // continous assigment of the correct PWM value for the LEDs
 
- /*here*/
+ assign pwm_led_0 = pwm_out_0;
+ assign pwm_led_1 = pwm_out_1;
+ assign pwm_led_2 = pwm_out_2;
+ assign pwm_led_3 = pwm_out_3;
+ assign pwm_led_4 = pwm_out_4;
+ assign pwm_led_5 = pwm_out_5;
 
 endmodule
