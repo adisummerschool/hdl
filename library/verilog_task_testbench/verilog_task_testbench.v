@@ -36,11 +36,42 @@
 
 `timescale 1ns/100ps
 
-module verilog_task_testbench ( 
+module verilog_task_testbench (
 
-  input            ref_clk,
-  input            rstn,
-  output   [11:0]  triangle_wave
+  input             ref_clk,
+  input             rstn,
+  output [11:0] triangle_wave
+
 );
+
+  reg count;
+  reg[11:0] triangle_aux;
+
+  always @(posedge ref_clk) begin
+    if (rstn == 0) begin
+      triangle_aux <= 12'd0;
+      count <= 1'b0;
+    end else begin
+
+      if (!count) begin
+        if (triangle_aux == 12'd4095) begin
+          count <= 1'b1;
+          triangle_aux <= triangle_aux - 1'b1;
+        end else begin
+          triangle_aux <= triangle_aux + 1'b1;
+        end
+      end else begin
+        if (triangle_aux == 12'd0) begin
+          count <= 1'b0;
+          triangle_aux <= triangle_aux + 1'b1;
+        end else begin
+          triangle_aux <= triangle_aux - 1'b1;
+        end
+      end
+
+    end
+  end
+
+  assign triangle_wave = triangle_aux;
 
 endmodule
