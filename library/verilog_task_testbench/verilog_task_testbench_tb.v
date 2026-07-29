@@ -40,4 +40,24 @@ module verilog_task_testbench_tb;
 
   `define TIMEOUT 900
 
+  reg ref_clk = 0;
+  reg rstn = 0;
+  wire [11:0] triangle_wave;
+
+  initial begin
+    rstn <= 1'b1;
+    #100 rstn <= 1'b0;
+    #100 rstn <= 1'b1;
+    #100000 $finish;
+  end
+
+  initial begin
+    ref_clk <= 1'b0;
+    forever begin
+      #1 ref_clk <= ~ref_clk;
+    end
+  end
+
+   verilog_task_testbench dut (.ref_clk(ref_clk), .rstn(rstn), .triangle_wave(triangle_wave));
+
 endmodule
