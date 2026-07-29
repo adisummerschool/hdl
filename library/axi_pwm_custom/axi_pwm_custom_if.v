@@ -54,34 +54,102 @@ module axi_pwm_custom_if (
   output           pwm_led_5
 );
 
-  localparam PULSE_PERIOD = 4095;
+  localparam PULSE_PERIOD = 12'd4095;
 
 // internal registers
 
-  /*here*/
+  reg [11:0] counter = 12'h0; //Counter for generating sawtooth signal
+  reg end_of_period = 1'b0;
+  reg pwm_led_0_buf, pwm_led_1_buf, pwm_led_2_buf; 
+  reg pwm_led_3_buf, pwm_led_4_buf, pwm_led_5_buf;
+  reg [11:0] data_reg_0;
+  reg [11:0] data_reg_1;
+  reg [11:0] data_reg_2;
+  reg [11:0] data_reg_3;
+  reg [11:0] data_reg_4;
+  reg [11:0] data_reg_5;
 
 // internal wires
 
-  /*here*/
+  
 
 // generate a signal named end_of_period which has '1' logic value at the end of the signal period
 
-  /*here*/
+  always@(posedge pwm_clk)begin
+
+    if(~rstn) end_of_period <= 1'b0;
+
+    else begin
+      if(counter == PULSE_PERIOD) end_of_period <= 1'b1;
+      else end_of_period <= 1'b0;
+    end
+  end
 
 // Create a counter from 0 to PULSE_PERIOD
 
-  /*here*/
+  always@(posedge pwm_clk) begin
+    if(~rstn) begin
+      counter <= 12'h0;
+    end
+    else begin
+      if(counter < PULSE_PERIOD) counter <= counter + 1;
+      else counter <= 12'h0;
+    end
+  end
 
 // control the pwm signal value based on the input signal and counter value
 
-  /*here*/
+  always@(posedge pwm_clk) begin
+    if(~rstn) begin
+      pwm_led_0_buf <= 1'b1;
+      pwm_led_1_buf <= 1'b1;
+      pwm_led_2_buf <= 1'b1;
+      pwm_led_3_buf <= 1'b1;
+      pwm_led_4_buf <= 1'b1;
+      pwm_led_5_buf <= 1'b1;
+    end
+    else begin 
+      pwm_led_0_buf <= data_reg_0>counter ? 1'b1:1'b0;
+      pwm_led_1_buf <= data_reg_1>counter ? 1'b1:1'b0;
+      pwm_led_2_buf <= data_reg_2>counter ? 1'b1:1'b0;
+      pwm_led_3_buf <= data_reg_3>counter ? 1'b1:1'b0;
+      pwm_led_4_buf <= data_reg_4>counter ? 1'b1:1'b0;
+      pwm_led_5_buf <= data_reg_5>counter ? 1'b1:1'b0;
+    end
+  end
 
 // make sure that the new data is processed only after the END_OF_PERIOD
 
-  /*here*/
+  always@(posedge pwm_clk) begin
+
+    if(~rstn) begin
+      data_reg_0 <= data_channel_0;
+      data_reg_1 <= data_channel_1;
+      data_reg_2 <= data_channel_2;
+      data_reg_3 <= data_channel_3;
+      data_reg_4 <= data_channel_4;
+      data_reg_5 <= data_channel_5;
+    end
+
+    else begin
+    
+      if(end_of_period) begin 
+        data_reg_0 <= data_channel_0;
+        data_reg_1 <= data_channel_1;
+        data_reg_2 <= data_channel_2;
+        data_reg_3 <= data_channel_3;
+        data_reg_4 <= data_channel_4;
+        data_reg_5 <= data_channel_5;
+      end
+    end
+  end
 
 // continous assigment of the correct PWM value for the LEDs
-
- /*here*/
+  assign pwm_led_0 = ((pwm_led_0_buf===1'bx)|(pwm_led_0_buf===1'bz)) ? 1:pwm_led_0_buf;
+  assign pwm_led_1 = ((pwm_led_1_buf===1'bx)|(pwm_led_1_buf===1'bz)) ? 1:pwm_led_1_buf;
+  assign pwm_led_2 = ((pwm_led_2_buf===1'bx)|(pwm_led_2_buf===1'bz)) ? 1:pwm_led_2_buf;
+  assign pwm_led_3 = ((pwm_led_3_buf===1'bx)|(pwm_led_3_buf===1'bz)) ? 1:pwm_led_3_buf;
+  assign pwm_led_4 = ((pwm_led_4_buf===1'bx)|(pwm_led_4_buf===1'bz)) ? 1:pwm_led_4_buf;
+  assign pwm_led_5 = ((pwm_led_5_buf===1'bx)|(pwm_led_5_buf===1'bz)) ? 1:pwm_led_5_buf;
 
 endmodule
