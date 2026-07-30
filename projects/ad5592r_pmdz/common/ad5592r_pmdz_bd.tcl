@@ -14,7 +14,7 @@
 #                   e.g. -from 7 -to 0 for an 8-bit bus
 #       <port_name> : name of the port (will appear on the top-level wrapper)
 #
-#   ad_ip_instance <ip_name> <instance_name> [<param_list>]
+#   ad_ip_instance <ip_name> <instance_name> [<param_list>] 
 #       Instantiates an IP core in the block design.
 #       <ip_name>       : the IP type to instantiate (e.g. axi_dmac)
 #       <instance_name> : the name you give this instance in the design
@@ -38,31 +38,43 @@
 #    These ports will be mapped to FPGA pins in the constraints file (.xdc).
 
   #here
+  create_bd_port -dir O pwm_led0
   #here
+  create_bd_port -dir O pwm_led1
   #here
-
+  create_bd_port -dir O pwm_led2 
   #here
+  create_bd_port -dir O pwm_led3
   #here
+  create_bd_port -dir O pwm_led4
   #here
+  create_bd_port -dir O pwm_led5
 
 # 2. Instantiate the axi_pwm_custom IP core.
 #    This creates a block named "axi_pwm_custom" in the design using
 #    the axi_pwm_custom IP (defined in library/axi_pwm_custom).
 
   #here
+  ad_ip_instance axi_pwm_custom axi_pwm_custom_personal
 
 # 3. Connect each top-level port to the corresponding output pin
 #    of the axi_pwm_custom IP.
 
   #here
+  ad_connect axi_pwm_custom_personal/pwm_led_0 pwm_led0
   #here
+  ad_connect axi_pwm_custom_personal/pwm_led_1 pwm_led1
   #here
-
+  ad_connect axi_pwm_custom_personal/pwm_led_2 pwm_led2 
   #here
+  ad_connect axi_pwm_custom_personal/pwm_led_3 pwm_led3
   #here
+  ad_connect axi_pwm_custom_personal/pwm_led_4 pwm_led4
   #here
+  ad_connect axi_pwm_custom_personal/pwm_led_5 pwm_led5
 
 # 4. Connect the axi_pwm_custom IP to the CPU's AXI bus at address 0x44A00000.
 #    This lets software read/write the IP's registers from the PS (processing system).
 
   #here
+  ad_cpu_interconnect 0x44A00000 axi_pwm_custom_personal
