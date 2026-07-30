@@ -37,32 +37,35 @@
 # 1. Create output ports for the PWM-driven RGB LEDs
 #    These ports will be mapped to FPGA pins in the constraints file (.xdc).
 
-  #here
-  #here
-  #here
+  create_bd_port -dir O port_pwm_led1_r
+  create_bd_port -dir O port_pwm_led2_r
+  
+  create_bd_port -dir O port_pwm_led1_g
+  create_bd_port -dir O port_pwm_led2_g
 
-  #here
-  #here
-  #here
+  create_bd_port -dir O port_pwm_led1_b
+  create_bd_port -dir O port_pwm_led2_b
 
 # 2. Instantiate the axi_pwm_custom IP core.
 #    This creates a block named "axi_pwm_custom" in the design using
 #    the axi_pwm_custom IP (defined in library/axi_pwm_custom).
 
-  #here
+  ad_ip_instance axi_pwm_custom LED_PWM_Sensor
+  
 
 # 3. Connect each top-level port to the corresponding output pin
 #    of the axi_pwm_custom IP.
 
-  #here
-  #here
-  #here
+  ad_connect LED_PWM_Sensor/pwm_led1_r port_pwm_led1_r
+  ad_connect LED_PWM_Sensor/pwm_led2_r port_pwm_led2_r
 
-  #here
-  #here
-  #here
+  ad_connect LED_PWM_Sensor/pwm_led1_g port_pwm_led1_g
+  ad_connect LED_PWM_Sensor/pwm_led2_g port_pwm_led2_g
+
+  ad_connect LED_PWM_Sensor/pwm_led1_b port_pwm_led2_b
+  ad_connect LED_PWM_Sensor/pwm_led2_b port_pwm_led2_b
 
 # 4. Connect the axi_pwm_custom IP to the CPU's AXI bus at address 0x44A00000.
 #    This lets software read/write the IP's registers from the PS (processing system).
 
-  #here
+  ad_cpu_interconnect 0x44A00000 LED_PWM_Sensor
