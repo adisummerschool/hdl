@@ -41,12 +41,12 @@ module axi_pwm_custom #(
   
 // 1.Create the pwm output signals 
 
-  output  reg                pwm_led1_r,
-  output  reg                pwm_led1_g,
-  output  reg                pwm_led1_b,
-  output  reg                pwm_led2_r,
-  output  reg                pwm_led2_g,
-  output  reg                pwm_led2_b,
+  output                  pwm_led1_r,
+  output                  pwm_led1_g,
+  output                  pwm_led1_b,
+  output                  pwm_led2_r,
+  output                  pwm_led2_g,
+  output                  pwm_led2_b,
   
 
   // axi interface
@@ -186,7 +186,7 @@ module axi_pwm_custom #(
     .adc_status_header ('b0),
     .adc_crc_err ('b0),
     .adc_softspan (),
-    .adc_data_channel (data_channel_1),  // Connect the samples data for CHANNEL 0 
+    .adc_data_channel (data_channel_0),  // Connect the samples data for CHANNEL 0 
     .up_adc_crc_err (),
     .up_adc_pn_err (),
     .up_adc_pn_oos (),
@@ -502,7 +502,7 @@ module axi_pwm_custom #(
     .pwm_led_2(pwm_led1_b),
     .pwm_led_3(pwm_led2_r),
     .pwm_led_4(pwm_led2_g),
-    .pwm_led_5(pwm_led2_b),
+    .pwm_led_5(pwm_led2_b)
   );
 
 endmodule

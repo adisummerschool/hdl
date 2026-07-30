@@ -108,14 +108,14 @@ always@(posedge pwm_clk) begin   ///////////
   
 // control the pwm signal value based on the input signal and counter value
 
-  if (rstn) begin
+
   comp0 <= (channel_0 > counter) ? 1'b1 : 1'b0;
   comp1 <= (channel_1 > counter) ? 1'b1 : 1'b0;
   comp2 <= (channel_2 > counter) ? 1'b1 : 1'b0;
   comp3 <= (channel_3 > counter) ? 1'b1 : 1'b0;
   comp4 <= (channel_4 > counter) ? 1'b1 : 1'b0;
   comp5 <= (channel_5 > counter) ? 1'b1 : 1'b0;
-  end
+  
 
 end  // end always posedge clk   ///////////////
 
