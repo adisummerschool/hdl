@@ -1,23 +1,34 @@
-# 1. Update the signals names for both JA and JB PMOD connectors
+# 1. Update the signal names for both JA and JB PMOD connectors
 
-##Pmod Header JA   ADC PMOD CONNECTOR
+## Pmod Header JA - ADC PMOD CONNECTOR
 
-set_property -dict { PACKAGE_PIN Y18  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L17P_T2_34 Sch=ja_p[1]   			 
-set_property -dict { PACKAGE_PIN Y19  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L17N_T2_34 Sch=ja_n[1]		     
-set_property -dict { PACKAGE_PIN Y16  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L7P_T1_34 Sch=ja_p[2]              
-set_property -dict { PACKAGE_PIN Y17  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L7N_T1_34 Sch=ja_n[2]              
-set_property -dict { PACKAGE_PIN U18  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L12P_T1_MRCC_34 Sch=ja_p[3]              
-set_property -dict { PACKAGE_PIN U19  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L12N_T1_MRCC_34 Sch=ja_n[3]              
-set_property -dict { PACKAGE_PIN W18  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L22P_T3_34 Sch=ja_p[4]              
-set_property -dict { PACKAGE_PIN W19  IOSTANDARD LVCMOS33 } [get_ports { /*here*/ }]; #IO_L22N_T3_34 Sch=ja_n[4]              
-                                                                                                                                                                                                                                                           
-##Pmod Header JB   SNIFFING PMOD CONNECTOR
+set_property -dict { PACKAGE_PIN Y18 IOSTANDARD LVCMOS33 } [get_ports {adc_spi_csn}];  # JA pin 1: CS
+set_property -dict { PACKAGE_PIN Y19 IOSTANDARD LVCMOS33 } [get_ports {adc_spi_mosi}]; # JA pin 2: MOSI
+set_property -dict { PACKAGE_PIN Y16 IOSTANDARD LVCMOS33 } [get_ports {adc_spi_miso}]; # JA pin 3: MISO
+set_property -dict { PACKAGE_PIN Y17 IOSTANDARD LVCMOS33 } [get_ports {adc_spi_clk}];  # JA pin 4: SCLK
 
-set_property -dict { PACKAGE_PIN W14  IOSTANDARD LVCMOS33  } [get_ports { /*here*/ }]; #IO_L8P_T1_34 Sch=jb_p[1]                  
-set_property -dict { PACKAGE_PIN Y14  IOSTANDARD LVCMOS33  } [get_ports { /*here*/ }]; #IO_L8N_T1_34 Sch=jb_n[1]				 
-set_property -dict { PACKAGE_PIN T11  IOSTANDARD LVCMOS33  } [get_ports { /*here*/ }]; #IO_L1P_T0_34 Sch=jb_p[2]                  
-set_property -dict { PACKAGE_PIN T10  IOSTANDARD LVCMOS33  } [get_ports { /*here*/ }]; #IO_L1N_T0_34 Sch=jb_n[2]             
-set_property -dict { PACKAGE_PIN V16  IOSTANDARD LVCMOS33  } [get_ports { /*here*/ }]; #IO_L18P_T2_34 Sch=jb_p[3]            
-set_property -dict { PACKAGE_PIN W16  IOSTANDARD LVCMOS33  } [get_ports { /*here*/ }]; #IO_L18N_T2_34 Sch=jb_n[3]            
-set_property -dict { PACKAGE_PIN V12  IOSTANDARD LVCMOS33  } [get_ports { /*here*/ }]; #IO_L4P_T0_34 Sch=jb_p[4]             
-set_property -dict { PACKAGE_PIN W13  IOSTANDARD LVCMOS33  } [get_ports { /*here*/ }]; #IO_L4N_T0_34 Sch=jb_n[4]         
+#set_property -dict { PACKAGE_PIN U18 IOSTANDARD LVCMOS33 } [get_ports {...}];
+#set_property -dict { PACKAGE_PIN U19 IOSTANDARD LVCMOS33 } [get_ports {...}];
+#set_property -dict { PACKAGE_PIN W18 IOSTANDARD LVCMOS33 } [get_ports {...}];
+#set_property -dict { PACKAGE_PIN W19 IOSTANDARD LVCMOS33 } [get_ports {...}];
+
+
+## Pmod Header JB - SNIFFING PMOD CONNECTOR
+
+set_property -dict { PACKAGE_PIN W14 IOSTANDARD LVCMOS33 } [get_ports {sniff_spi_csn}];  # JB pin 1: CS
+set_property -dict { PACKAGE_PIN Y14 IOSTANDARD LVCMOS33 } [get_ports {sniff_spi_mosi}]; # JB pin 2: MOSI
+set_property -dict { PACKAGE_PIN T11 IOSTANDARD LVCMOS33 } [get_ports {sniff_spi_miso}]; # JB pin 3: MISO
+set_property -dict { PACKAGE_PIN T10 IOSTANDARD LVCMOS33 } [get_ports {sniff_spi_clk}];  # JB pin 4: SCLK
+
+
+
+
+## GPIO - RGB LEDs
+
+set_property -dict { PACKAGE_PIN L15 IOSTANDARD LVCMOS33 } [get_ports {led[0]}]; # LED0_B
+set_property -dict { PACKAGE_PIN N15 IOSTANDARD LVCMOS33 } [get_ports {led[1]}]; # LED0_R
+set_property -dict { PACKAGE_PIN G17 IOSTANDARD LVCMOS33 } [get_ports {led[2]}]; # LED0_G
+
+set_property -dict { PACKAGE_PIN G14 IOSTANDARD LVCMOS33 } [get_ports {led[3]}]; # LED1_B
+set_property -dict { PACKAGE_PIN M15 IOSTANDARD LVCMOS33 } [get_ports {led[4]}]; # LED1_R
+set_property -dict { PACKAGE_PIN L14 IOSTANDARD LVCMOS33 } [get_ports {led[5]}]; # LED1_G

@@ -500,7 +500,7 @@ module axi_pwm_custom #(
   .pwm_led_2(pwm_led1_b),
   .pwm_led_3(pwm_led2_r),
   .pwm_led_4(pwm_led2_g),
-  .pwm_led_5(pwm_led2_b),
+  .pwm_led_5(pwm_led2_b)
   );
 
 endmodule
