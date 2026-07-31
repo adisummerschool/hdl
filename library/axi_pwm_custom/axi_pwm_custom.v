@@ -507,19 +507,19 @@ module axi_pwm_custom #(
 
   my_ila i_ila (
       .clk(adc_clk),
-      .probe0 (rstn),
+      .probe0 (up_rstn),
       .probe1 (data_channel_0),
       .probe2 (data_channel_1),
       .probe3 (data_channel_2),
       .probe4 (data_channel_3),
       .probe5 (data_channel_4),
       .probe6 (data_channel_5),
-      .probe7 (), // pwm_led_0_r
-      .probe8 (), // pwm_led_0_g
-      .probe9 (), // pwm_led_0_b
-      .probe10 (), // pwm_led_1_r
-      .probe11 (), // pwm_led_1_g
-      .probe12 () // pwm_led_1_b
+      .probe7 (pwm_led1_r), // pwm_led_0_r
+      .probe8 (pwm_led1_g), // pwm_led_0_g
+      .probe9 (pwm_led1_b), // pwm_led_0_b
+      .probe10 (pwm_led2_r), // pwm_led_1_r
+      .probe11 (pwm_led2_g), // pwm_led_1_g
+      .probe12 (pwm_led2_b) // pwm_led_1_b
     );
  
 endmodule

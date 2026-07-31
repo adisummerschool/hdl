@@ -108,12 +108,12 @@ module system_top (
   ) i_iobuf_leds (
     .dio_t (2'h0),
 // 2. Connect the PWM wires to the input port of the ad_iobuf
-    .dio_i ({pwm_1_g,           //led[5] green
-             pwm_1_r,           //led[4] red
-             pwm_1_b,           //led[3] blue
-             pwm_0_g,           //led[2] green
-             pwm_0_r,           //led[1] red
-             pwm_0_b}),        //led[0] blue
+    .dio_i ({led_1_g,           //led[5] green
+             led_1_r,           //led[4] red
+             led_1_b,           //led[3] blue
+             led_0_g,           //led[2] green
+             led_0_r,           //led[1] red
+             led_0_b}),        //led[0] blue
     .dio_o (gpio_i[7:2]),
     .dio_p (led));
 
